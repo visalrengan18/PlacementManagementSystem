@@ -24,6 +24,10 @@ import ApplicantSwipe from './pages/company/ApplicantSwipe';
 import CompanyMatches from './pages/company/CompanyMatches';
 import CompanyProfile from './pages/company/CompanyProfile';
 
+// Chat Pages
+import ChatList from './pages/chat/ChatList';
+import ChatWindow from './pages/chat/ChatWindow';
+
 import './styles/global.css';
 import './styles/components.css';
 
@@ -66,6 +70,10 @@ function App() {
               <Route path="/company/matches" element={<ProtectedRoute requiredRole="COMPANY"><CompanyMatches /></ProtectedRoute>} />
               <Route path="/company/profile" element={<ProtectedRoute requiredRole="COMPANY"><CompanyProfile /></ProtectedRoute>} />
 
+              {/* Chat Routes */}
+              <Route path="/chats" element={<ProtectedRoute><ChatList /></ProtectedRoute>} />
+              <Route path="/chat/:matchId" element={<ProtectedRoute><ChatWindow /></ProtectedRoute>} />
+
               {/* 404 */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
@@ -77,3 +85,4 @@ function App() {
 }
 
 export default App;
+

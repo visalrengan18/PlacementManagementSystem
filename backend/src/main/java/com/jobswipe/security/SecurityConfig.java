@@ -37,6 +37,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/ws/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/profile/seeker/**").hasRole("SEEKER")
                         .requestMatchers("/api/jobs/swipe/**").hasRole("SEEKER")
@@ -47,6 +48,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/jobs/company/**").hasRole("COMPANY")
                         .requestMatchers("/api/swipes/applicant").hasRole("COMPANY")
                         .requestMatchers("/api/matches/company").hasRole("COMPANY")
+                        .requestMatchers("/api/chats/**").authenticated()
                         .anyRequest().authenticated())
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

@@ -83,6 +83,13 @@ const Navbar = () => {
                                 </>
                             )}
 
+                            <Link
+                                to="/chats"
+                                className={`nav-link ${isActive('/chats') ? 'active' : ''}`}
+                            >
+                                💬 Messages
+                            </Link>
+
                             <div className="navbar-user">
                                 <Link to={isSeeker ? '/seeker/profile' : '/company/profile'} className="user-avatar-btn">
                                     <div className="user-avatar">

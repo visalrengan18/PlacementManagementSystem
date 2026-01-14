@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useNotification } from '../../context/NotificationContext';
 import swipeApi from '../../api/swipeApi';
 import './Matches.css';
@@ -65,7 +66,7 @@ const SeekerMatches = () => {
                                 </div>
                                 <div className="match-card-footer">
                                     <span>{formatTimeAgo(match.matchedAt)}</span>
-                                    <button className="btn btn-primary btn-sm">💬 Contact</button>
+                                    <Link to={`/chat/${match.id}`} className="btn btn-primary btn-sm">💬 Chat</Link>
                                 </div>
                             </div>
                         ))}
@@ -83,3 +84,4 @@ const SeekerMatches = () => {
 };
 
 export default SeekerMatches;
+
