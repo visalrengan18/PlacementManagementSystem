@@ -51,6 +51,12 @@ const Navbar = () => {
                                     >
                                         Matches
                                     </Link>
+                                    <Link
+                                        to="/seeker/views"
+                                        className={`nav-link ${isActive('/seeker/views') ? 'active' : ''}`}
+                                    >
+                                        👀 Views
+                                    </Link>
                                 </>
                             )}
 

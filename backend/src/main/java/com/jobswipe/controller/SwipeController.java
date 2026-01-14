@@ -50,4 +50,13 @@ public class SwipeController {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(swipeService.getJobApplicants(user.getId(), jobId, pageable));
     }
+
+    @GetMapping("/applications/views")
+    public ResponseEntity<Page<com.jobswipe.dto.profile.ProfileViewDto>> getProfileViews(
+            @AuthenticationPrincipal User user,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(swipeService.getProfileViews(user.getId(), pageable));
+    }
 }

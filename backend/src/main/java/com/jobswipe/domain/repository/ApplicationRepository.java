@@ -27,4 +27,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     Optional<Application> findBySeekerAndJob(SeekerProfile seeker, JobPost job);
 
     boolean existsBySeekerAndJob(SeekerProfile seeker, JobPost job);
+
+    @Query("SELECT a FROM Application a WHERE a.seeker = :seeker AND a.status != 'PENDING' ORDER BY a.reviewedAt DESC NULLS LAST")
+    Page<Application> findViewedApplications(@Param("seeker") SeekerProfile seeker, Pageable pageable);
 }

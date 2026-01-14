@@ -113,6 +113,26 @@ public class SwipeServiceImpl implements SwipeService {
         return applications.map(app -> toSeekerDto(app.getSeeker(), app.getId()));
     }
 
+    @Override
+    public Page<ProfileViewDto> getProfileViews(Long userId, Pageable pageable) {
+        SeekerProfile seeker = seekerProfileRepository.findByUserId(userId)
+                .orElseThrow(() -> new ApiException("Profile not found", HttpStatus.NOT_FOUND));
+
+        return applicationRepository.findViewedApplications(seeker, pageable)
+                .map(this::toProfileViewDto);
+    }
+
+    private ProfileViewDto toProfileViewDto(Application app) {
+        String companyName = app.getJob().getCompany().getUser().getName();
+        return ProfileViewDto.builder()
+                .companyName(companyName)
+                .companyLogo(companyName != null && !companyName.isEmpty() ? companyName.substring(0, 1) : "C")
+                .jobTitle(app.getJob().getTitle())
+                .jobId(app.getJob().getId())
+                .viewedAt(app.getReviewedAt() != null ? app.getReviewedAt() : app.getAppliedAt())
+                .build();
+    }
+
     private ApplicationDto toApplicationDto(Application a) {
         return ApplicationDto.builder()
                 .id(a.getId())

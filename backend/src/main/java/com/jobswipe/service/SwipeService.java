@@ -16,4 +16,6 @@ public interface SwipeService {
     Page<ApplicationDto> getSeekerApplications(Long userId, Pageable pageable);
 
     Page<SeekerProfileDto> getJobApplicants(Long userId, Long jobId, Pageable pageable);
+
+    Page<com.jobswipe.dto.profile.ProfileViewDto> getProfileViews(Long userId, Pageable pageable);
 }

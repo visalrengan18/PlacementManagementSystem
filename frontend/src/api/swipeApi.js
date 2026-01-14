@@ -27,6 +27,14 @@ export const swipeApi = {
         return response.data;
     },
 
+    // Get who viewed seeker's profile
+    getProfileViews: async (page = 0, size = 10) => {
+        const response = await axios.get('/applications/views', {
+            params: { page, size },
+        });
+        return response.data;
+    },
+
     // Get seeker's matches
     getSeekerMatches: async () => {
         const response = await axios.get('/matches/seeker');
