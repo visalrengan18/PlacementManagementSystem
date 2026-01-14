@@ -1,0 +1,140 @@
+.swipe-card-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.swipe-card {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    background: var(--color-bg-card);
+    border-radius: var(--radius-2xl);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    user-select: none;
+    touch-action: none;
+}
+
+.swipe-card.dragging {
+    box-shadow: var(--shadow-lg), 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.swipe-card.swipe-right {
+    box-shadow: var(--shadow-lg), 0 0 40px rgba(16, 185, 129, 0.4);
+}
+
+.swipe-card.swipe-left {
+    box-shadow: var(--shadow-lg), 0 0 40px rgba(239, 68, 68, 0.4);
+}
+
+/* Swipe indicators */
+.swipe-indicator {
+    position: absolute;
+    top: 30px;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    font-weight: 700;
+    font-size: var(--font-size-lg);
+    letter-spacing: 2px;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.swipe-indicator.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.swipe-indicator-right {
+    right: 20px;
+    background: var(--color-success-bg);
+    color: var(--color-success);
+    border: 2px solid var(--color-success);
+    transform-origin: right center;
+    rotate: 15deg;
+}
+
+.swipe-indicator-left {
+    left: 20px;
+    background: var(--color-danger-bg);
+    color: var(--color-danger);
+    border: 2px solid var(--color-danger);
+    transform-origin: left center;
+    rotate: -15deg;
+}
+
+.swipe-card-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Action buttons */
+.swipe-actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-xl);
+}
+
+.swipe-btn {
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-full);
+    border: none;
+    font-size: var(--font-size-xl);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.swipe-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.swipe-btn-left {
+    background: var(--color-bg-elevated);
+    color: var(--color-danger);
+    border: 2px solid var(--color-danger);
+}
+
+.swipe-btn-left:hover:not(:disabled) {
+    background: var(--color-danger);
+    color: white;
+    transform: scale(1.1);
+}
+
+.swipe-btn-right {
+    background: var(--color-bg-elevated);
+    color: var(--color-success);
+    border: 2px solid var(--color-success);
+}
+
+.swipe-btn-right:hover:not(:disabled) {
+    background: var(--color-success);
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .swipe-card {
+        aspect-ratio: 2.5 / 4;
+    }
+
+    .swipe-btn {
+        width: 56px;
+        height: 56px;
+    }
+}

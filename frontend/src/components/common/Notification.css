@@ -1,0 +1,96 @@
+.notification-container {
+    position: fixed;
+    top: 80px;
+    right: var(--spacing-lg);
+    z-index: var(--z-notification);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    max-width: 400px;
+}
+
+.notification {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-elevated);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow-lg);
+    animation: notificationEnter 0.3s ease-out;
+}
+
+.notification.exiting {
+    animation: notificationExit 0.3s ease-out forwards;
+}
+
+.notification-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-sm);
+    flex-shrink: 0;
+}
+
+.notification-success .notification-icon {
+    background: var(--color-success-bg);
+    color: var(--color-success);
+}
+
+.notification-error .notification-icon {
+    background: var(--color-danger-bg);
+    color: var(--color-danger);
+}
+
+.notification-warning .notification-icon {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--color-warning);
+}
+
+.notification-info .notification-icon {
+    background: rgba(59, 130, 246, 0.2);
+    color: var(--color-info);
+}
+
+.notification-match {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(99, 102, 241, 0.2));
+    border-color: rgba(236, 72, 153, 0.3);
+    animation: notificationEnter 0.3s ease-out, pulseGlow 2s ease-in-out infinite;
+}
+
+.notification-match .notification-icon {
+    background: transparent;
+    font-size: var(--font-size-lg);
+}
+
+.notification-message {
+    flex: 1;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    padding: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+    transition: color var(--transition-fast);
+}
+
+.notification-close:hover {
+    color: var(--color-text-primary);
+}
+
+@media (max-width: 480px) {
+    .notification-container {
+        left: var(--spacing-md);
+        right: var(--spacing-md);
+        max-width: none;
+    }
+}

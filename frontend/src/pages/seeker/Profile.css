@@ -1,0 +1,151 @@
+.profile-page {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.profile-header-section {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-2xl);
+    padding: var(--spacing-xl);
+    background: var(--color-bg-card);
+    border-radius: var(--radius-2xl);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.profile-avatar-edit {
+    position: relative;
+}
+
+.profile-avatar-edit .profile-avatar-large {
+    width: 100px;
+    height: 100px;
+    font-size: 2.5rem;
+}
+
+.avatar-edit-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    background: var(--color-primary);
+    border: 2px solid var(--color-bg-card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: transform var(--transition-fast);
+}
+
+.avatar-edit-btn:hover {
+    transform: scale(1.1);
+}
+
+.profile-header-info h1 {
+    font-size: var(--font-size-2xl);
+    margin: 0 0 var(--spacing-xs);
+}
+
+.profile-header-info p {
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--spacing-sm);
+}
+
+.profile-header-info .profile-location {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+}
+
+/* Form */
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+}
+
+.profile-section {
+    padding: var(--spacing-xl);
+}
+
+.profile-section .section-title {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    margin: 0 0 var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+}
+
+.form-grid .full-width {
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 600px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-header-section {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* Skills */
+.skills-input-group {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.skills-input-group .form-input {
+    flex: 1;
+}
+
+.skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+
+.skill-tag.editable {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding-right: var(--spacing-sm);
+}
+
+.skill-remove {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    font-size: var(--font-size-lg);
+    line-height: 1;
+    padding: 0;
+    transition: color var(--transition-fast);
+}
+
+.skill-remove:hover {
+    color: var(--color-danger);
+}
+
+/* Actions */
+.profile-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: var(--spacing-lg);
+}
+
+.profile-actions .btn-lg {
+    min-width: 180px;
+}
