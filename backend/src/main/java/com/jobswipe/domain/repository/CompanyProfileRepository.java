@@ -12,4 +12,7 @@ public interface CompanyProfileRepository extends JpaRepository<CompanyProfile, 
     Optional<CompanyProfile> findByUser(User user);
 
     Optional<CompanyProfile> findByUserId(Long userId);
+
+    org.springframework.data.domain.Page<CompanyProfile> findByUser_NameContainingIgnoreCase(String name,
+            org.springframework.data.domain.Pageable pageable);
 }

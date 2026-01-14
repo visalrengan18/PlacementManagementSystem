@@ -14,13 +14,15 @@ import java.util.List;
 @Repository
 public interface JobPostRepository extends JpaRepository<JobPost, Long> {
 
-    List<JobPost> findByCompany(CompanyProfile company);
+        List<JobPost> findByCompany(CompanyProfile company);
 
-    Page<JobPost> findByStatus(JobStatus status, Pageable pageable);
+        Page<JobPost> findByStatus(JobStatus status, Pageable pageable);
 
-    @Query("SELECT j FROM JobPost j WHERE j.status = :status AND j.id NOT IN " +
-            "(SELECT a.job.id FROM Application a WHERE a.seeker.id = :seekerId)")
-    Page<JobPost> findAvailableJobsForSeeker(@Param("seekerId") Long seekerId,
-            @Param("status") JobStatus status,
-            Pageable pageable);
+        @Query("SELECT j FROM JobPost j WHERE j.status = :status AND j.id NOT IN " +
+                        "(SELECT a.job.id FROM Application a WHERE a.seeker.id = :seekerId)")
+        Page<JobPost> findAvailableJobsForSeeker(@Param("seekerId") Long seekerId,
+                        @Param("status") JobStatus status,
+                        Pageable pageable);
+
+        Page<JobPost> findByCompanyAndStatus(CompanyProfile company, JobStatus status, Pageable pageable);
 }

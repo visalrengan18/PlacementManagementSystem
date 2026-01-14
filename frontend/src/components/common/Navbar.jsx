@@ -34,6 +34,12 @@ const Navbar = () => {
                                         Dashboard
                                     </Link>
                                     <Link
+                                        to="/seeker/companies"
+                                        className={`nav-link ${isActive('/seeker/companies') ? 'active' : ''}`}
+                                    >
+                                        🏢 Companies
+                                    </Link>
+                                    <Link
                                         to="/seeker/jobs"
                                         className={`nav-link ${isActive('/seeker/jobs') ? 'active' : ''}`}
                                     >

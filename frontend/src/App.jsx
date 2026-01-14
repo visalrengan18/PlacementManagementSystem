@@ -16,6 +16,8 @@ import SeekerProfile from './pages/seeker/SeekerProfile';
 import Applications from './pages/seeker/Applications';
 import SeekerMatches from './pages/seeker/SeekerMatches';
 import ProfileViews from './pages/seeker/ProfileViews';
+import CompanySearch from './pages/seeker/CompanySearch';
+import CompanyDetails from './pages/seeker/CompanyDetails';
 
 // Company Pages
 import CompanyDashboard from './pages/company/CompanyDashboard';
@@ -63,6 +65,8 @@ function App() {
               <Route path="/seeker/applications" element={<ProtectedRoute requiredRole="SEEKER"><Applications /></ProtectedRoute>} />
               <Route path="/seeker/matches" element={<ProtectedRoute requiredRole="SEEKER"><SeekerMatches /></ProtectedRoute>} />
               <Route path="/seeker/views" element={<ProtectedRoute requiredRole="SEEKER"><ProfileViews /></ProtectedRoute>} />
+              <Route path="/seeker/companies" element={<ProtectedRoute requiredRole="SEEKER"><CompanySearch /></ProtectedRoute>} />
+              <Route path="/seeker/companies/:id" element={<ProtectedRoute requiredRole="SEEKER"><CompanyDetails /></ProtectedRoute>} />
 
               {/* Company Routes */}
               <Route path="/company/dashboard" element={<ProtectedRoute requiredRole="COMPANY"><CompanyDashboard /></ProtectedRoute>} />
