@@ -59,36 +59,38 @@ const Applications = () => {
     return (
         <div className="page-container">
             <div className="applications-page">
-                <div className="page-header">
+                <div className="page-header center-header">
                     <h1>My Applications</h1>
-                    <p className="text-muted">Track the status of your job applications</p>
+                    <p className="text-muted">Track and manage your job application status</p>
                 </div>
 
-                <div className="applications-stats">
-                    <div className="stat-item">
-                        <span className="stat-value">{applications.length}</span>
-                        <span className="stat-label">Total</span>
+                <div className="app-stats">
+                    <div className="app-stat">
+                        <span className="stat-number">{applications.length}</span>
+                        <span className="stat-text">Total</span>
                     </div>
-                    <div className="stat-item">
-                        <span className="stat-value">{applications.filter(a => a.status === 'PENDING').length}</span>
-                        <span className="stat-label">Pending</span>
+                    <div className="app-stat">
+                        <span className="stat-number">{applications.filter(a => a.status === 'PENDING').length}</span>
+                        <span className="stat-text">Pending</span>
                     </div>
-                    <div className="stat-item">
-                        <span className="stat-value">{applications.filter(a => a.status === 'ACCEPTED').length}</span>
-                        <span className="stat-label">Matched</span>
+                    <div className="app-stat highlight">
+                        <span className="stat-number">{applications.filter(a => a.status === 'ACCEPTED').length}</span>
+                        <span className="stat-text">Matched</span>
                     </div>
                 </div>
 
-                <div className="filter-tabs">
-                    {['ALL', 'PENDING', 'VIEWED', 'ACCEPTED', 'REJECTED'].map((tab) => (
-                        <button
-                            key={tab}
-                            className={`filter-tab ${filter === tab ? 'active' : ''}`}
-                            onClick={() => setFilter(tab)}
-                        >
-                            {tab.charAt(0) + tab.slice(1).toLowerCase()}
-                        </button>
-                    ))}
+                <div className="filter-tabs-container">
+                    <div className="filter-tabs">
+                        {['ALL', 'PENDING', 'VIEWED', 'ACCEPTED', 'REJECTED'].map((tab) => (
+                            <button
+                                key={tab}
+                                className={`filter-tab ${filter === tab ? 'active' : ''}`}
+                                onClick={() => setFilter(tab)}
+                            >
+                                {tab.charAt(0) + tab.slice(1).toLowerCase()}
+                            </button>
+                        ))}
+                    </div>
                 </div>
 
                 {filteredApps.length > 0 ? (
@@ -97,16 +99,16 @@ const Applications = () => {
                             const status = getStatusBadge(app.status);
                             return (
                                 <div key={app.id} className="application-card">
-                                    <div className="application-company">
-                                        <div className="company-logo">{app.job?.company?.name?.charAt(0) || 'C'}</div>
-                                        <div className="application-info">
-                                            <h3>{app.job?.title || 'Job Title'}</h3>
-                                            <p>{app.job?.company?.name || 'Company'}</p>
-                                        </div>
+                                    <div className="app-company-logo">
+                                        {app.job?.company?.name?.charAt(0) || 'C'}
                                     </div>
-                                    <div className="application-meta">
-                                        <span className={`status-badge ${status.class}`}>{status.label}</span>
-                                        <span className="application-date">{formatDate(app.appliedAt)}</span>
+                                    <div className="app-details">
+                                        <h3 className="app-title">{app.job?.title || 'Job Title'}</h3>
+                                        <p className="app-company">{app.job?.company?.name || 'Company'}</p>
+                                        <p className="app-date">Applied on {formatDate(app.appliedAt)}</p>
+                                    </div>
+                                    <div className="app-status">
+                                        <span className={`badge ${status.class}`}>{status.label}</span>
                                     </div>
                                 </div>
                             );
@@ -114,9 +116,9 @@ const Applications = () => {
                     </div>
                 ) : (
                     <div className="empty-state">
-                        <div className="empty-state-icon">📋</div>
-                        <h3>No applications yet</h3>
-                        <p>Start swiping on jobs to see your applications here!</p>
+                        <div className="empty-state-icon">📂</div>
+                        <h3>No applications found</h3>
+                        <p>You haven't applied to any jobs with this status yet.</p>
                     </div>
                 )}
             </div>
