@@ -28,11 +28,14 @@ axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response) {
-            // Handle 401 Unauthorized
+            // Handle 401 Unauthorized - but NOT for auth endpoints
             if (error.response.status === 401) {
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
-                window.location.href = '/login';
+                const isAuthEndpoint = error.config.url?.includes('/auth/');
+                if (!isAuthEndpoint) {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    window.location.href = '/login';
+                }
             }
             // Handle other errors
             const message = error.response.data?.message || 'An error occurred';

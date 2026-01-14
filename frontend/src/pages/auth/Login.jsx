@@ -11,7 +11,7 @@ const Login = () => {
     const [errors, setErrors] = useState({});
 
     const { login } = useAuth();
-    const { error: showError } = useNotification();
+    const { error: showError, success: showSuccess } = useNotification();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -34,6 +34,7 @@ const Login = () => {
         setLoading(true);
         try {
             const user = await login(email, password);
+            showSuccess(`Welcome back, ${user.name}! 🎉`);
             // Redirect based on role
             const redirectPath = user.role === 'SEEKER' ? '/seeker/dashboard' : '/company/dashboard';
             navigate(from !== '/' ? from : redirectPath, { replace: true });
