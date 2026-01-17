@@ -12,8 +12,8 @@ export const chatApi = {
         return response.data;
     },
 
-    getMessages: async (matchId) => {
-        const response = await axios.get(`/chats/${matchId}/messages`);
+    getMessages: async (matchId, page = 0, size = 20) => {
+        const response = await axios.get(`/chats/${matchId}/messages?page=${page}&size=${size}`);
         return response.data;
     },
 
@@ -32,8 +32,8 @@ export const chatApi = {
         return response.data;
     },
 
-    getMessagesByChatRoomId: async (chatRoomId) => {
-        const response = await axios.get(`/chats/room/${chatRoomId}/messages`);
+    getMessagesByChatRoomId: async (chatRoomId, page = 0, size = 20) => {
+        const response = await axios.get(`/chats/room/${chatRoomId}/messages?page=${page}&size=${size}`);
         return response.data;
     },
 

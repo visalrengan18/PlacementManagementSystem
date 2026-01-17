@@ -2,6 +2,8 @@ package com.jobswipe.service;
 
 import com.jobswipe.dto.chat.ChatRoomDto;
 import com.jobswipe.dto.chat.MessageDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface ChatService {
@@ -10,7 +12,7 @@ public interface ChatService {
 
     ChatRoomDto getOrCreateChatRoom(Long userId, Long matchId);
 
-    List<MessageDto> getMessages(Long userId, Long matchId);
+    Page<MessageDto> getMessages(Long userId, Long matchId, Pageable pageable);
 
     MessageDto sendMessage(Long userId, Long matchId, String content);
 
@@ -19,7 +21,7 @@ public interface ChatService {
     // Chat room ID based methods
     ChatRoomDto getChatRoomById(Long userId, Long chatRoomId);
 
-    List<MessageDto> getMessagesByChatRoomId(Long userId, Long chatRoomId);
+    Page<MessageDto> getMessagesByChatRoomId(Long userId, Long chatRoomId, Pageable pageable);
 
     MessageDto sendMessageToChatRoom(Long userId, Long chatRoomId, String content);
 

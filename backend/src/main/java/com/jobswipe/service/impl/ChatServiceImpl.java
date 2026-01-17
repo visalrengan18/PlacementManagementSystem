@@ -7,6 +7,8 @@ import com.jobswipe.exception.ApiException;
 import com.jobswipe.service.ChatService;
 import com.jobswipe.service.NotificationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,7 +76,7 @@ public class ChatServiceImpl implements ChatService {
         }
 
         @Override
-        public List<MessageDto> getMessages(Long userId, Long matchId) {
+        public Page<MessageDto> getMessages(Long userId, Long matchId, Pageable pageable) {
                 User user = getUser(userId);
                 Match match = matchRepository.findById(matchId)
                                 .orElseThrow(() -> new ApiException("Match not found", HttpStatus.NOT_FOUND));
@@ -87,9 +89,8 @@ public class ChatServiceImpl implements ChatService {
                 ChatRoom chatRoom = chatRoomRepository.findByUsers(seekerUser.getId(), companyUser.getId())
                                 .orElseThrow(() -> new ApiException("Chat not found", HttpStatus.NOT_FOUND));
 
-                return messageRepository.findByChatRoomOrderByCreatedAtAsc(chatRoom).stream()
-                                .map(m -> toMessageDto(m, user))
-                                .collect(Collectors.toList());
+                return messageRepository.findByChatRoomOrderByCreatedAtDesc(chatRoom, pageable)
+                                .map(m -> toMessageDto(m, user));
         }
 
         @Override
@@ -139,13 +140,12 @@ public class ChatServiceImpl implements ChatService {
         }
 
         @Override
-        public List<MessageDto> getMessagesByChatRoomId(Long userId, Long chatRoomId) {
+        public Page<MessageDto> getMessagesByChatRoomId(Long userId, Long chatRoomId, Pageable pageable) {
                 User user = getUser(userId);
                 ChatRoom chatRoom = getChatRoomWithAccess(chatRoomId, user);
 
-                return messageRepository.findByChatRoomOrderByCreatedAtAsc(chatRoom).stream()
-                                .map(m -> toMessageDto(m, user))
-                                .collect(Collectors.toList());
+                return messageRepository.findByChatRoomOrderByCreatedAtDesc(chatRoom, pageable)
+                                .map(m -> toMessageDto(m, user));
         }
 
         @Override
