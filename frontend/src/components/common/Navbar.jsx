@@ -1,5 +1,6 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import NotificationDropdown from './NotificationDropdown';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -101,6 +102,8 @@ const Navbar = () => {
                             >
                                 💬 Messages
                             </Link>
+
+                            <NotificationDropdown />
 
                             <div className="navbar-user">
                                 <Link to={isSeeker ? '/seeker/profile' : '/company/profile'} className="user-avatar-btn">
