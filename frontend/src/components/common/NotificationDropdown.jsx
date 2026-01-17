@@ -1,24 +1,70 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import SockJS from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
 import { useAuth } from '../../context/AuthContext';
+import { useNotification } from '../../context/NotificationContext'; // specific hook
 import notificationApi from '../../api/notificationApi';
 import './NotificationDropdown.css';
 
+const WS_URL = import.meta.env.VITE_WS_URL || 'http://localhost:8080/ws';
+
 const NotificationDropdown = () => {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user } = useAuth();
+    const { info } = useNotification();
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const dropdownRef = useRef(null);
+    const clientRef = useRef(null);
 
     useEffect(() => {
         if (isAuthenticated) {
             fetchUnreadCount();
-            const interval = setInterval(fetchUnreadCount, 30000); // Poll every 30s
-            return () => clearInterval(interval);
+            // Initial fetch
+            fetchNotifications();
+
+            // Setup WebSocket
+            const token = localStorage.getItem('token');
+            if (token && user?.id) {
+                const client = new Client({
+                    webSocketFactory: () => new SockJS(WS_URL),
+                    connectHeaders: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                    reconnectDelay: 5000,
+                    heartbeatIncoming: 4000,
+                    heartbeatOutgoing: 4000,
+                });
+
+                client.onConnect = () => {
+                    client.subscribe(`/topic/notifications/${user.id}`, (message) => {
+                        const notification = JSON.parse(message.body);
+                        handleNewNotification(notification);
+                    });
+                };
+
+                client.activate();
+                clientRef.current = client;
+            }
+
+            return () => {
+                if (clientRef.current) {
+                    clientRef.current.deactivate();
+                    clientRef.current = null;
+                }
+            };
         }
-    }, [isAuthenticated]);
+    }, [isAuthenticated, user]);
+
+    const handleNewNotification = (notification) => {
+        setUnreadCount((prev) => prev + 1);
+        setNotifications((prev) => [notification, ...prev]);
+
+        // Show toast
+        info(notification.title + ": " + notification.message, { duration: 5000 });
+    };
 
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -49,8 +95,12 @@ const NotificationDropdown = () => {
     };
 
     const handleToggle = () => {
+        // No need to fetch on toggle anymore as we keep it updated via WS + initial fetch
+        // But we can refresh to be safe or if WS failed
         if (!isOpen) {
+            // maybe refresh just in case?
             fetchNotifications();
+            fetchUnreadCount();
         }
         setIsOpen(!isOpen);
     };
