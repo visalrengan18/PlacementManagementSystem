@@ -7,6 +7,7 @@ import com.jobswipe.dto.application.ApplicationDto;
 import com.jobswipe.dto.job.JobPostDto;
 import com.jobswipe.dto.profile.*;
 import com.jobswipe.exception.ApiException;
+import com.jobswipe.service.NotificationService;
 import com.jobswipe.service.SwipeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -23,6 +24,7 @@ public class SwipeServiceImpl implements SwipeService {
     private final SeekerProfileRepository seekerProfileRepository;
     private final CompanyProfileRepository companyProfileRepository;
     private final MatchRepository matchRepository;
+    private final NotificationService notificationService;
 
     @Override
     @Transactional
@@ -45,6 +47,14 @@ public class SwipeServiceImpl implements SwipeService {
         Application application = Application.builder().seeker(seeker).job(job).build();
         applicationRepository.save(application);
 
+        // Notify company of new application
+        notificationService.createNotification(
+                job.getCompany().getUser().getId(),
+                NotificationType.APPLICATION,
+                "New Application",
+                seeker.getUser().getName() + " applied to " + job.getTitle(),
+                application.getId());
+
         return SwipeResponse.builder().success(true).isMatch(false).message("Application submitted").build();
     }
 
@@ -64,6 +74,15 @@ public class SwipeServiceImpl implements SwipeService {
         if (request.getDirection() == SwipeRequest.SwipeDirection.LEFT) {
             application.reject();
             applicationRepository.save(application);
+
+            // Notify seeker of rejection
+            notificationService.createNotification(
+                    application.getSeeker().getUser().getId(),
+                    NotificationType.APPLICATION_STATUS,
+                    "Application Update",
+                    "Your application for " + application.getJob().getTitle() + " was not selected",
+                    application.getId());
+
             return SwipeResponse.builder().success(true).isMatch(false).message("Candidate rejected").build();
         }
 
@@ -73,6 +92,27 @@ public class SwipeServiceImpl implements SwipeService {
 
         Match match = Match.builder().application(application).build();
         matchRepository.save(match);
+
+        // Notify both parties of the match
+        String seekerName = application.getSeeker().getUser().getName();
+        String companyName = company.getUser().getName();
+        String jobTitle = application.getJob().getTitle();
+
+        // Notify seeker
+        notificationService.createNotification(
+                application.getSeeker().getUser().getId(),
+                NotificationType.MATCH,
+                "It's a Match! 🎉",
+                "You matched with " + companyName + " for " + jobTitle,
+                match.getId());
+
+        // Notify company
+        notificationService.createNotification(
+                company.getUser().getId(),
+                NotificationType.MATCH,
+                "It's a Match! 🎉",
+                "You matched with " + seekerName + " for " + jobTitle,
+                match.getId());
 
         return SwipeResponse.builder().success(true).isMatch(true).message("It's a match!").build();
     }
@@ -107,6 +147,14 @@ public class SwipeServiceImpl implements SwipeService {
                 app.setStatus(ApplicationStatus.VIEWED);
                 app.setReviewedAt(java.time.LocalDateTime.now());
                 applicationRepository.save(app);
+
+                // Notify seeker that company viewed their profile
+                notificationService.createNotification(
+                        app.getSeeker().getUser().getId(),
+                        NotificationType.PROFILE_VIEW,
+                        "Profile Viewed 👀",
+                        company.getUser().getName() + " viewed your profile for " + job.getTitle(),
+                        app.getId());
             }
         });
 

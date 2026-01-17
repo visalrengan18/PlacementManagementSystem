@@ -5,6 +5,7 @@ import com.jobswipe.domain.repository.*;
 import com.jobswipe.dto.chat.*;
 import com.jobswipe.exception.ApiException;
 import com.jobswipe.service.ChatService;
+import com.jobswipe.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class ChatServiceImpl implements ChatService {
         private final MessageRepository messageRepository;
         private final MatchRepository matchRepository;
         private final UserRepository userRepository;
+        private final NotificationService notificationService;
 
         @Override
         public List<ChatRoomDto> getUserChatRooms(Long userId) {
@@ -120,6 +122,17 @@ public class ChatServiceImpl implements ChatService {
                                 .build();
 
                 message = messageRepository.save(message);
+
+                // Notify recipient of new message
+                User otherUser = getOtherUser(chatRoom, user);
+                notificationService.createNotification(
+                                otherUser.getId(),
+                                NotificationType.MESSAGE,
+                                "New Message",
+                                user.getName() + ": "
+                                                + (content.length() > 50 ? content.substring(0, 50) + "..." : content),
+                                chatRoom.getId());
+
                 return toMessageDto(message, user);
         }
 
@@ -177,6 +190,17 @@ public class ChatServiceImpl implements ChatService {
                                 .build();
 
                 message = messageRepository.save(message);
+
+                // Notify recipient of new message
+                User otherUser = getOtherUser(chatRoom, user);
+                notificationService.createNotification(
+                                otherUser.getId(),
+                                NotificationType.MESSAGE,
+                                "New Message",
+                                user.getName() + ": "
+                                                + (content.length() > 50 ? content.substring(0, 50) + "..." : content),
+                                chatRoom.getId());
+
                 return toMessageDto(message, user);
         }
 
