@@ -45,6 +45,11 @@ export const chatApi = {
     markChatRoomAsRead: async (chatRoomId) => {
         await axios.put(`/chats/room/${chatRoomId}/read`);
     },
+
+    getOnlineUsers: async () => {
+        const response = await axios.get('/chats/online');
+        return response.data;
+    }
 };
 
 export default chatApi;

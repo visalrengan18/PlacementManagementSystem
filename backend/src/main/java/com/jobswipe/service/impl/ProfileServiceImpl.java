@@ -87,6 +87,23 @@ public class ProfileServiceImpl implements ProfileService {
         return toCompanyDto(profile);
     }
 
+    @Override
+    public Object getPublicProfileByUserId(Long userId) {
+        User user = getUser(userId);
+
+        if (user.getRole() == Role.SEEKER) {
+            return seekerProfileRepository.findByUser(user)
+                    .map(this::toSeekerDto)
+                    .orElseThrow(() -> new ApiException("Seeker profile not found", HttpStatus.NOT_FOUND));
+        } else if (user.getRole() == Role.COMPANY) {
+            return companyProfileRepository.findByUser(user)
+                    .map(this::toCompanyDto)
+                    .orElseThrow(() -> new ApiException("Company profile not found", HttpStatus.NOT_FOUND));
+        } else {
+            throw new ApiException("Unknown user role", HttpStatus.BAD_REQUEST);
+        }
+    }
+
     private User getUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new ApiException("User not found", HttpStatus.NOT_FOUND));

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { searchApi, followApi, connectionApi, directChatApi } from '../../api/networkApi';
 import './SearchPage.css';
 
@@ -115,11 +115,13 @@ const SearchPage = () => {
                 ) : (
                     results.map(user => (
                         <div key={user.id} className="user-card">
-                            <div className="user-avatar">
+                            <Link to={`/profile/${user.id}`} className="user-avatar no-underline text-inherit block hover:opacity-80">
                                 {user.name?.charAt(0).toUpperCase() || '?'}
-                            </div>
+                            </Link>
                             <div className="user-info">
-                                <h3 className="user-name">{user.name}</h3>
+                                <Link to={`/profile/${user.id}`} className="no-underline text-inherit hover:opacity-80">
+                                    <h3 className="user-name">{user.name}</h3>
+                                </Link>
                                 {user.title && <p className="user-title">{user.title}</p>}
                                 <div className="user-meta">
                                     <span className="user-role">{user.role}</span>

@@ -70,8 +70,15 @@ const CompanyDashboard = () => {
                         <div className="matches-list">
                             {matches.map((m) => (
                                 <div key={m.id} className="match-item">
-                                    <div className="match-avatar">{m.seeker?.name?.charAt(0) || 'S'}</div>
-                                    <div className="match-info"><h4 className="match-company">{m.seeker?.name || 'Candidate'}</h4><p className="match-position">{m.job?.title || 'Position'}</p></div>
+                                    <Link to={`/profile/${m.seeker?.userId}`} className="match-avatar no-underline text-inherit block">
+                                        {m.seeker?.name?.charAt(0) || 'S'}
+                                    </Link>
+                                    <div className="match-info">
+                                        <Link to={`/profile/${m.seeker?.userId}`} className="no-underline text-inherit hover:opacity-80">
+                                            <h4 className="match-company">{m.seeker?.name || 'Candidate'}</h4>
+                                        </Link>
+                                        <p className="match-position">{m.job?.title || 'Position'}</p>
+                                    </div>
                                     <span className="match-time">{formatTimeAgo(m.matchedAt)}</span>
                                 </div>
                             ))}

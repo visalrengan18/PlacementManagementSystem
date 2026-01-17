@@ -34,6 +34,12 @@ export const profileApi = {
         const response = await axios.get(`/profile/company/${companyId}`);
         return response.data;
     },
+
+    // Get any user profile by user ID
+    getPublicProfileByUserId: async (userId) => {
+        const response = await axios.get(`/profile/user/${userId}`);
+        return response.data;
+    },
 };
 
 export default profileApi;

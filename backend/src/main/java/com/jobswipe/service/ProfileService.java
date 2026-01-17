@@ -16,4 +16,7 @@ public interface ProfileService {
     SeekerProfileDto getPublicSeekerProfile(Long seekerId);
 
     CompanyProfileDto getPublicCompanyProfile(Long companyId);
+
+    // Get public profile by User ID (generic)
+    Object getPublicProfileByUserId(Long userId);
 }

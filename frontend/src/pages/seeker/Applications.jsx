@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useNotification } from '../../context/NotificationContext';
 import swipeApi from '../../api/swipeApi';
 import './Applications.css';
@@ -99,12 +100,14 @@ const Applications = () => {
                             const status = getStatusBadge(app.status);
                             return (
                                 <div key={app.id} className="application-card">
-                                    <div className="app-company-logo">
+                                    <Link to={`/profile/${app.job?.company?.userId}`} className="app-company-logo no-underline text-inherit block hover:opacity-80">
                                         {app.job?.company?.name?.charAt(0) || 'C'}
-                                    </div>
+                                    </Link>
                                     <div className="app-details">
                                         <h3 className="app-title">{app.job?.title || 'Job Title'}</h3>
-                                        <p className="app-company">{app.job?.company?.name || 'Company'}</p>
+                                        <Link to={`/profile/${app.job?.company?.userId}`} className="no-underline text-inherit hover:opacity-80">
+                                            <p className="app-company">{app.job?.company?.name || 'Company'}</p>
+                                        </Link>
                                         <p className="app-date">Applied on {formatDate(app.appliedAt)}</p>
                                     </div>
                                     <div className="app-status">

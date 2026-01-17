@@ -39,17 +39,37 @@ const ChatList = () => {
                 {chats.length > 0 ? (
                     <div className="chat-list">
                         {chats.map((chat) => (
-                            <Link key={chat.id} to={`/chat/room/${chat.id}`} className="chat-list-item">
-                                <div className="chat-list-avatar">{chat.otherUserName?.charAt(0) || 'U'}</div>
-                                <div className="chat-list-info">
-                                    <h3>{chat.otherUserName}</h3>
-                                    <p className="chat-list-preview">{chat.lastMessage || 'No messages yet'}</p>
-                                </div>
-                                <div className="chat-list-meta">
-                                    {chat.lastMessageTime && <span className="chat-list-time">{chat.lastMessageTime}</span>}
-                                    {chat.unreadCount > 0 && <span className="unread-badge">{chat.unreadCount}</span>}
-                                </div>
-                            </Link>
+                            <div key={chat.id} className="chat-list-item-wrapper" style={{ position: 'relative' }}>
+                                <Link to={`/chat/room/${chat.id}`} className="chat-list-item">
+                                    <div className="chat-list-avatar" style={{ visibility: 'hidden' }}>
+                                        {chat.otherUserName?.charAt(0) || 'U'}
+                                    </div>
+                                    <div className="chat-list-info">
+                                        <h3>{chat.otherUserName}</h3>
+                                        <p className="chat-list-preview">{chat.lastMessage || 'No messages yet'}</p>
+                                    </div>
+                                    <div className="chat-list-meta">
+                                        {chat.lastMessageTime && <span className="chat-list-time">{chat.lastMessageTime}</span>}
+                                        {chat.unreadCount > 0 && <span className="unread-badge">{chat.unreadCount}</span>}
+                                    </div>
+                                </Link>
+                                <Link
+                                    to={`/profile/${chat.otherUserId}`}
+                                    className="chat-list-avatar absolute-avatar"
+                                    style={{
+                                        position: 'absolute',
+                                        left: '1rem',
+                                        top: '50%',
+                                        transform: 'translateY(-50%)',
+                                        zIndex: 2,
+                                        textDecoration: 'none',
+                                        cursor: 'pointer'
+                                    }}
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    {chat.otherUserName?.charAt(0) || 'U'}
+                                </Link>
+                            </div>
                         ))}
                     </div>
                 ) : (

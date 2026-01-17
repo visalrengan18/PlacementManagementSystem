@@ -20,6 +20,8 @@ const ChatWindow = () => {
     const messagesEndRef = useRef(null);
     const messagesContainerRef = useRef(null);
 
+    const [otherUserOnline, setOtherUserOnline] = useState(false);
+
     const handleNewMessage = useCallback((message) => {
         setMessages((prev) => [...prev, message]);
         // Scroll to bottom on new message
@@ -28,7 +30,13 @@ const ChatWindow = () => {
         }, 100);
     }, []);
 
-    const { connected, sendMessage } = useWebSocket(matchId, handleNewMessage);
+    const handlePresenceChange = useCallback((presence) => {
+        if (chatRoom && presence.userId === chatRoom.otherUserId) {
+            setOtherUserOnline(presence.online);
+        }
+    }, [chatRoom]);
+
+    const { connected, sendMessage } = useWebSocket(matchId, handleNewMessage, handlePresenceChange);
 
     const loadMessages = async (pageNum, isInitial = false) => {
         try {
@@ -62,8 +70,17 @@ const ChatWindow = () => {
     useEffect(() => {
         const fetchInitialData = async () => {
             try {
-                const roomData = await chatApi.getChatRoom(matchId);
+                const [roomData, onlineUsers] = await Promise.all([
+                    chatApi.getChatRoom(matchId),
+                    chatApi.getOnlineUsers()
+                ]);
                 setChatRoom(roomData);
+
+                // Set initial online status
+                if (roomData.otherUserId) {
+                    setOtherUserOnline(onlineUsers.includes(roomData.otherUserId));
+                }
+
                 await loadMessages(0, true);
                 setPage(0);
                 await chatApi.markAsRead(matchId);
@@ -128,13 +145,15 @@ const ChatWindow = () => {
                 <div className="chat-header">
                     <Link to={user?.role === 'SEEKER' ? '/seeker/matches' : '/company/matches'} className="back-btn">← Back</Link>
                     <div className="chat-header-info">
-                        <div className="chat-avatar">{chatRoom?.otherUserName?.charAt(0) || 'U'}</div>
-                        <div>
-                            <h2>{chatRoom?.otherUserName || 'Chat'}</h2>
-                        </div>
+                        <Link to={`/profile/${chatRoom?.otherUserId}`} className="chat-header-link">
+                            <div className="chat-avatar">{chatRoom?.otherUserName?.charAt(0) || 'U'}</div>
+                            <div>
+                                <h2>{chatRoom?.otherUserName || 'Chat'}</h2>
+                            </div>
+                        </Link>
                     </div>
-                    <span className={`connection-status ${connected ? 'online' : 'offline'}`}>
-                        {connected ? '● Online' : '○ Offline'}
+                    <span className={`connection-status ${otherUserOnline ? 'online' : 'offline'}`}>
+                        {otherUserOnline ? '● Online' : '○ Offline'}
                     </span>
                 </div>
 

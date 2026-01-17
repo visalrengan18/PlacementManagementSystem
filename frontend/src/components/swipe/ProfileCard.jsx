@@ -1,13 +1,13 @@
 import './ProfileCard.css';
 
-const ProfileCard = ({ profile, type = 'seeker' }) => {
+const ProfileCard = ({ profile, type = 'seeker', showSwipeHints = true }) => {
     if (type === 'seeker') {
-        return <SeekerProfileCard profile={profile} />;
+        return <SeekerProfileCard profile={profile} showSwipeHints={showSwipeHints} />;
     }
-    return <CompanyProfileCard profile={profile} />;
+    return <CompanyProfileCard profile={profile} showSwipeHints={showSwipeHints} />;
 };
 
-const SeekerProfileCard = ({ profile }) => {
+const SeekerProfileCard = ({ profile, showSwipeHints }) => {
     const {
         name,
         title,
@@ -84,13 +84,15 @@ const SeekerProfileCard = ({ profile }) => {
                 )}
             </div>
 
-            <div className="profile-card-footer">
-                <span className="swipe-hint">
-                    <span className="hint-left">← Reject</span>
-                    <span className="hint-drag">Swipe to decide</span>
-                    <span className="hint-right">Accept →</span>
-                </span>
-            </div>
+            {showSwipeHints && (
+                <div className="profile-card-footer">
+                    <span className="swipe-hint">
+                        <span className="hint-left">← Reject</span>
+                        <span className="hint-drag">Swipe to decide</span>
+                        <span className="hint-right">Accept →</span>
+                    </span>
+                </div>
+            )}
         </div>
     );
 };

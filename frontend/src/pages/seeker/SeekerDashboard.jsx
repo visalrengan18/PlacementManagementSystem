@@ -68,8 +68,15 @@ const SeekerDashboard = () => {
                         <div className="matches-list">
                             {matches.map((m) => (
                                 <div key={m.id} className="match-item">
-                                    <div className="match-avatar">{m.company?.name?.charAt(0) || 'C'}</div>
-                                    <div className="match-info"><h4 className="match-company">{m.company?.name || 'Company'}</h4><p className="match-position">{m.job?.title || 'Position'}</p></div>
+                                    <Link to={`/profile/${m.company?.userId}`} className="match-avatar no-underline text-inherit block">
+                                        {m.company?.name?.charAt(0) || 'C'}
+                                    </Link>
+                                    <div className="match-info">
+                                        <Link to={`/profile/${m.company?.userId}`} className="no-underline text-inherit hover:opacity-80">
+                                            <h4 className="match-company">{m.company?.name || 'Company'}</h4>
+                                        </Link>
+                                        <p className="match-position">{m.job?.title || 'Position'}</p>
+                                    </div>
                                     <span className="match-time">{formatTimeAgo(m.matchedAt)}</span>
                                 </div>
                             ))}

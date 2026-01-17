@@ -48,10 +48,14 @@ const CompanyMatches = () => {
                         {matches.map((match) => (
                             <div key={match.id} className="match-card">
                                 <div className="match-card-header">
-                                    <div className="company-logo-match">{match.seeker?.name?.charAt(0) || 'S'}</div>
+                                    <Link to={`/profile/${match.seeker?.userId}`} className="company-logo-match no-underline text-inherit">
+                                        {match.seeker?.name?.charAt(0) || 'S'}
+                                    </Link>
                                 </div>
                                 <div className="match-card-body">
-                                    <h3>{match.seeker?.name || 'Candidate'}</h3>
+                                    <Link to={`/profile/${match.seeker?.userId}`} className="no-underline text-inherit hover:opacity-80">
+                                        <h3>{match.seeker?.name || 'Candidate'}</h3>
+                                    </Link>
                                     <p>{match.seeker?.title || 'Job Seeker'}</p>
                                     <span className="match-meta">For: {match.job?.title || 'Position'}</span>
                                 </div>
@@ -75,4 +79,3 @@ const CompanyMatches = () => {
 };
 
 export default CompanyMatches;
-

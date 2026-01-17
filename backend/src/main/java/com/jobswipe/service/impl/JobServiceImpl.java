@@ -130,6 +130,7 @@ public class JobServiceImpl implements JobService {
                 .createdAt(j.getCreatedAt())
                 .company(CompanyProfileDto.builder()
                         .id(j.getCompany().getId())
+                        .userId(j.getCompany().getUser().getId())
                         .name(j.getCompany().getUser().getName())
                         .industry(j.getCompany().getIndustry())
                         .location(j.getCompany().getLocation())
