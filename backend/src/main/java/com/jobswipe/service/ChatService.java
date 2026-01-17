@@ -15,4 +15,13 @@ public interface ChatService {
     MessageDto sendMessage(Long userId, Long matchId, String content);
 
     void markMessagesAsRead(Long userId, Long matchId);
+
+    // Chat room ID based methods
+    ChatRoomDto getChatRoomById(Long userId, Long chatRoomId);
+
+    List<MessageDto> getMessagesByChatRoomId(Long userId, Long chatRoomId);
+
+    MessageDto sendMessageToChatRoom(Long userId, Long chatRoomId, String content);
+
+    void markChatRoomMessagesAsRead(Long userId, Long chatRoomId);
 }

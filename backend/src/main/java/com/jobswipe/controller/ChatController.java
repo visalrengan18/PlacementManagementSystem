@@ -21,6 +21,7 @@ public class ChatController {
         return ResponseEntity.ok(chatService.getUserChatRooms(user.getId()));
     }
 
+    // Match-based endpoints (for initiating chat from matches page)
     @GetMapping("/{matchId}")
     public ResponseEntity<ChatRoomDto> getChatRoom(
             @AuthenticationPrincipal User user,
@@ -48,6 +49,37 @@ public class ChatController {
             @AuthenticationPrincipal User user,
             @PathVariable Long matchId) {
         chatService.markMessagesAsRead(user.getId(), matchId);
+        return ResponseEntity.ok().build();
+    }
+
+    // Chat room ID based endpoints (for navigating from chat list)
+    @GetMapping("/room/{chatRoomId}")
+    public ResponseEntity<ChatRoomDto> getChatRoomById(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long chatRoomId) {
+        return ResponseEntity.ok(chatService.getChatRoomById(user.getId(), chatRoomId));
+    }
+
+    @GetMapping("/room/{chatRoomId}/messages")
+    public ResponseEntity<List<MessageDto>> getMessagesByChatRoomId(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long chatRoomId) {
+        return ResponseEntity.ok(chatService.getMessagesByChatRoomId(user.getId(), chatRoomId));
+    }
+
+    @PostMapping("/room/{chatRoomId}/messages")
+    public ResponseEntity<MessageDto> sendMessageToChatRoom(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long chatRoomId,
+            @RequestBody SendMessageRequest request) {
+        return ResponseEntity.ok(chatService.sendMessageToChatRoom(user.getId(), chatRoomId, request.getContent()));
+    }
+
+    @PutMapping("/room/{chatRoomId}/read")
+    public ResponseEntity<Void> markChatRoomAsRead(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long chatRoomId) {
+        chatService.markChatRoomMessagesAsRead(user.getId(), chatRoomId);
         return ResponseEntity.ok().build();
     }
 }

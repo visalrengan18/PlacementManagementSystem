@@ -80,7 +80,6 @@ const ChatWindow = () => {
                         <div className="chat-avatar">{chatRoom?.otherUserName?.charAt(0) || 'U'}</div>
                         <div>
                             <h2>{chatRoom?.otherUserName || 'Chat'}</h2>
-                            <span className="chat-job">{chatRoom?.jobTitle || ''}</span>
                         </div>
                     </div>
                     <span className={`connection-status ${connected ? 'online' : 'offline'}`}>

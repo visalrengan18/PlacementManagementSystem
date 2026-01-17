@@ -5,7 +5,9 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "chat_rooms")
+@Table(name = "chat_rooms", uniqueConstraints = {
+        @UniqueConstraint(columnNames = { "seeker_id", "company_id" })
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,9 +18,13 @@ public class ChatRoom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "match_id", nullable = false, unique = true)
-    private Match match;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "seeker_id", nullable = false)
+    private SeekerProfile seeker;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id", nullable = false)
+    private CompanyProfile company;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;

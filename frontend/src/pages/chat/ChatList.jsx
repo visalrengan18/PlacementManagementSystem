@@ -39,7 +39,7 @@ const ChatList = () => {
                 {chats.length > 0 ? (
                     <div className="chat-list">
                         {chats.map((chat) => (
-                            <Link key={chat.id} to={`/chat/${chat.matchId}`} className="chat-list-item">
+                            <Link key={chat.id} to={`/chat/room/${chat.id}`} className="chat-list-item">
                                 <div className="chat-list-avatar">{chat.otherUserName?.charAt(0) || 'U'}</div>
                                 <div className="chat-list-info">
                                     <h3>{chat.otherUserName}</h3>
