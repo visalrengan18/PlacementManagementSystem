@@ -116,7 +116,8 @@ const NotificationDropdown = () => {
 
         // Navigate based on notification type
         const routes = {
-            MATCH: '/seeker/matches',
+            MATCH: `/profile/${notification.relatedId}`,
+            FOLLOW: `/profile/${notification.relatedId}`,
             MESSAGE: `/chat/room/${notification.relatedId}`,
             APPLICATION: `/company/applicants/${notification.relatedId}`,
             APPLICATION_STATUS: '/seeker/applications',
@@ -124,6 +125,20 @@ const NotificationDropdown = () => {
         };
 
         const route = routes[notification.type];
+
+        if (notification.type === 'MATCH' && user.role === 'SEEKER') {
+            navigate(`/seeker/jobs/view/${notification.relatedId}`);
+            setIsOpen(false);
+            return;
+        }
+
+        // Fallback for "New Follower" using PROFILE_VIEW
+        if (notification.type === 'PROFILE_VIEW' && (notification.title?.includes('Follower') || notification.message?.includes('following'))) {
+            navigate(`/profile/${notification.relatedId}`);
+            setIsOpen(false);
+            return;
+        }
+
         if (route) {
             navigate(route);
             setIsOpen(false);
@@ -139,6 +154,7 @@ const NotificationDropdown = () => {
     const getIcon = (type) => {
         const icons = {
             MATCH: '💕',
+            FOLLOW: '👥',
             MESSAGE: '💬',
             APPLICATION: '📄',
             APPLICATION_STATUS: '📋',

@@ -5,5 +5,6 @@ public enum NotificationType {
     MESSAGE,
     APPLICATION,
     APPLICATION_STATUS,
-    PROFILE_VIEW
+    PROFILE_VIEW,
+    FOLLOW
 }
