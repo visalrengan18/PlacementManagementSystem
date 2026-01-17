@@ -30,7 +30,7 @@ public class ChatServiceImpl implements ChatService {
                 List<ChatRoom> chatRooms = chatRoomRepository.findByUserId(userId);
 
                 return chatRooms.stream().map(room -> {
-                        User otherUser = getOtherUser(room, user);
+                        User otherUser = room.getOtherUser(userId);
                         List<Message> messages = messageRepository.findByChatRoomOrderByCreatedAtAsc(room);
                         Message lastMsg = messages.isEmpty() ? null : messages.get(messages.size() - 1);
                         long unread = messageRepository.countUnreadMessages(room, user);
@@ -58,16 +58,12 @@ public class ChatServiceImpl implements ChatService {
 
                 validateMatchAccess(match, user);
 
-                SeekerProfile seeker = match.getApplication().getSeeker();
-                CompanyProfile company = match.getApplication().getJob().getCompany();
+                // Get both users from the match
+                User seekerUser = match.getApplication().getSeeker().getUser();
+                User companyUser = match.getApplication().getJob().getCompany().getUser();
 
-                ChatRoom chatRoom = chatRoomRepository.findBySeekerAndCompany(seeker, company)
-                                .orElseGet(() -> chatRoomRepository.save(ChatRoom.builder()
-                                                .seeker(seeker)
-                                                .company(company)
-                                                .build()));
-
-                User otherUser = getOtherUser(chatRoom, user);
+                ChatRoom chatRoom = getOrCreateChatBetweenUsers(seekerUser, companyUser);
+                User otherUser = chatRoom.getOtherUser(userId);
 
                 return ChatRoomDto.builder()
                                 .id(chatRoom.getId())
@@ -85,10 +81,10 @@ public class ChatServiceImpl implements ChatService {
 
                 validateMatchAccess(match, user);
 
-                SeekerProfile seeker = match.getApplication().getSeeker();
-                CompanyProfile company = match.getApplication().getJob().getCompany();
+                User seekerUser = match.getApplication().getSeeker().getUser();
+                User companyUser = match.getApplication().getJob().getCompany().getUser();
 
-                ChatRoom chatRoom = chatRoomRepository.findBySeekerAndCompany(seeker, company)
+                ChatRoom chatRoom = chatRoomRepository.findByUsers(seekerUser.getId(), companyUser.getId())
                                 .orElseThrow(() -> new ApiException("Chat not found", HttpStatus.NOT_FOUND));
 
                 return messageRepository.findByChatRoomOrderByCreatedAtAsc(chatRoom).stream()
@@ -105,35 +101,12 @@ public class ChatServiceImpl implements ChatService {
 
                 validateMatchAccess(match, user);
 
-                SeekerProfile seeker = match.getApplication().getSeeker();
-                CompanyProfile company = match.getApplication().getJob().getCompany();
+                User seekerUser = match.getApplication().getSeeker().getUser();
+                User companyUser = match.getApplication().getJob().getCompany().getUser();
 
-                ChatRoom chatRoom = chatRoomRepository.findBySeekerAndCompany(seeker, company)
-                                .orElseGet(() -> chatRoomRepository.save(ChatRoom.builder()
-                                                .seeker(seeker)
-                                                .company(company)
-                                                .build()));
+                ChatRoom chatRoom = getOrCreateChatBetweenUsers(seekerUser, companyUser);
 
-                Message message = Message.builder()
-                                .chatRoom(chatRoom)
-                                .sender(user)
-                                .content(content)
-                                .status(MessageStatus.SENT)
-                                .build();
-
-                message = messageRepository.save(message);
-
-                // Notify recipient of new message
-                User otherUser = getOtherUser(chatRoom, user);
-                notificationService.createNotification(
-                                otherUser.getId(),
-                                NotificationType.MESSAGE,
-                                "New Message",
-                                user.getName() + ": "
-                                                + (content.length() > 50 ? content.substring(0, 50) + "..." : content),
-                                chatRoom.getId());
-
-                return toMessageDto(message, user);
+                return sendMessageToRoom(chatRoom, user, content);
         }
 
         @Override
@@ -145,13 +118,12 @@ public class ChatServiceImpl implements ChatService {
 
                 validateMatchAccess(match, user);
 
-                SeekerProfile seeker = match.getApplication().getSeeker();
-                CompanyProfile company = match.getApplication().getJob().getCompany();
+                User seekerUser = match.getApplication().getSeeker().getUser();
+                User companyUser = match.getApplication().getJob().getCompany().getUser();
 
-                ChatRoom chatRoom = chatRoomRepository.findBySeekerAndCompany(seeker, company).orElse(null);
-                if (chatRoom != null) {
-                        messageRepository.markMessagesAsRead(chatRoom, user, MessageStatus.READ);
-                }
+                chatRoomRepository.findByUsers(seekerUser.getId(), companyUser.getId())
+                                .ifPresent(chatRoom -> messageRepository.markMessagesAsRead(chatRoom, user,
+                                                MessageStatus.READ));
         }
 
         @Override
@@ -161,8 +133,8 @@ public class ChatServiceImpl implements ChatService {
 
                 return ChatRoomDto.builder()
                                 .id(chatRoom.getId())
-                                .otherUserName(getOtherUser(chatRoom, user).getName())
-                                .otherUserId(getOtherUser(chatRoom, user).getId())
+                                .otherUserName(chatRoom.getOtherUser(userId).getName())
+                                .otherUserId(chatRoom.getOtherUser(userId).getId())
                                 .build();
         }
 
@@ -181,27 +153,7 @@ public class ChatServiceImpl implements ChatService {
         public MessageDto sendMessageToChatRoom(Long userId, Long chatRoomId, String content) {
                 User user = getUser(userId);
                 ChatRoom chatRoom = getChatRoomWithAccess(chatRoomId, user);
-
-                Message message = Message.builder()
-                                .chatRoom(chatRoom)
-                                .sender(user)
-                                .content(content)
-                                .status(MessageStatus.SENT)
-                                .build();
-
-                message = messageRepository.save(message);
-
-                // Notify recipient of new message
-                User otherUser = getOtherUser(chatRoom, user);
-                notificationService.createNotification(
-                                otherUser.getId(),
-                                NotificationType.MESSAGE,
-                                "New Message",
-                                user.getName() + ": "
-                                                + (content.length() > 50 ? content.substring(0, 50) + "..." : content),
-                                chatRoom.getId());
-
-                return toMessageDto(message, user);
+                return sendMessageToRoom(chatRoom, user, content);
         }
 
         @Override
@@ -212,14 +164,64 @@ public class ChatServiceImpl implements ChatService {
                 messageRepository.markMessagesAsRead(chatRoom, user, MessageStatus.READ);
         }
 
+        // New method: Get or create direct chat between any two users
+        @Transactional
+        public ChatRoomDto getOrCreateDirectChat(Long userId, Long otherUserId) {
+                User user = getUser(userId);
+                User otherUser = getUser(otherUserId);
+
+                ChatRoom chatRoom = getOrCreateChatBetweenUsers(user, otherUser);
+
+                return ChatRoomDto.builder()
+                                .id(chatRoom.getId())
+                                .otherUserName(otherUser.getName())
+                                .otherUserId(otherUser.getId())
+                                .build();
+        }
+
+        // Helper: Get or create chat room between two users
+        private ChatRoom getOrCreateChatBetweenUsers(User user1, User user2) {
+                // Ensure consistent ordering: lower ID first
+                Long id1 = Math.min(user1.getId(), user2.getId());
+                Long id2 = Math.max(user1.getId(), user2.getId());
+                User first = user1.getId().equals(id1) ? user1 : user2;
+                User second = user1.getId().equals(id2) ? user1 : user2;
+
+                return chatRoomRepository.findByUsers(id1, id2)
+                                .orElseGet(() -> chatRoomRepository.save(ChatRoom.builder()
+                                                .user1(first)
+                                                .user2(second)
+                                                .build()));
+        }
+
+        // Helper: Send message and create notification
+        private MessageDto sendMessageToRoom(ChatRoom chatRoom, User sender, String content) {
+                Message message = Message.builder()
+                                .chatRoom(chatRoom)
+                                .sender(sender)
+                                .content(content)
+                                .status(MessageStatus.SENT)
+                                .build();
+
+                message = messageRepository.save(message);
+
+                User otherUser = chatRoom.getOtherUser(sender.getId());
+                notificationService.createNotification(
+                                otherUser.getId(),
+                                NotificationType.MESSAGE,
+                                "New Message",
+                                sender.getName() + ": "
+                                                + (content.length() > 50 ? content.substring(0, 50) + "..." : content),
+                                chatRoom.getId());
+
+                return toMessageDto(message, sender);
+        }
+
         private ChatRoom getChatRoomWithAccess(Long chatRoomId, User user) {
                 ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
                                 .orElseThrow(() -> new ApiException("Chat room not found", HttpStatus.NOT_FOUND));
 
-                Long seekerUserId = chatRoom.getSeeker().getUser().getId();
-                Long companyUserId = chatRoom.getCompany().getUser().getId();
-
-                if (!user.getId().equals(seekerUserId) && !user.getId().equals(companyUserId)) {
+                if (!chatRoom.hasUser(user.getId())) {
                         throw new ApiException("Access denied", HttpStatus.FORBIDDEN);
                 }
 
@@ -229,12 +231,6 @@ public class ChatServiceImpl implements ChatService {
         private User getUser(Long userId) {
                 return userRepository.findById(userId)
                                 .orElseThrow(() -> new ApiException("User not found", HttpStatus.NOT_FOUND));
-        }
-
-        private User getOtherUser(ChatRoom chatRoom, User currentUser) {
-                User seeker = chatRoom.getSeeker().getUser();
-                User company = chatRoom.getCompany().getUser();
-                return seeker.getId().equals(currentUser.getId()) ? company : seeker;
         }
 
         private void validateMatchAccess(Match match, User user) {

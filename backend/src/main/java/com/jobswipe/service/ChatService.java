@@ -24,4 +24,7 @@ public interface ChatService {
     MessageDto sendMessageToChatRoom(Long userId, Long chatRoomId, String content);
 
     void markChatRoomMessagesAsRead(Long userId, Long chatRoomId);
+
+    // Direct messaging
+    ChatRoomDto getOrCreateDirectChat(Long userId, Long otherUserId);
 }
