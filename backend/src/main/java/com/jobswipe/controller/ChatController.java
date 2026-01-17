@@ -82,4 +82,12 @@ public class ChatController {
         chatService.markChatRoomMessagesAsRead(user.getId(), chatRoomId);
         return ResponseEntity.ok().build();
     }
+
+    // Direct messaging endpoint (for starting chat with any user)
+    @GetMapping("/direct/{userId}")
+    public ResponseEntity<ChatRoomDto> getOrCreateDirectChat(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long userId) {
+        return ResponseEntity.ok(chatService.getOrCreateDirectChat(user.getId(), userId));
+    }
 }
