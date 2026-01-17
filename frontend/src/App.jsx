@@ -35,6 +35,7 @@ import ChatRoomWindow from './pages/chat/ChatRoomWindow';
 // Network Pages
 import SearchPage from './pages/network/SearchPage';
 import NetworkPage from './pages/network/NetworkPage';
+import UserProfile from './pages/common/UserProfile';
 
 import './styles/global.css';
 import './styles/components.css';
@@ -89,6 +90,8 @@ function App() {
               {/* Network Routes */}
               <Route path="/search" element={<ProtectedRoute><SearchPage /></ProtectedRoute>} />
               <Route path="/network" element={<ProtectedRoute><NetworkPage /></ProtectedRoute>} />
+
+              <Route path="/profile/:userId" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
 
               {/* 404 */}
               <Route path="*" element={<Navigate to="/" replace />} />

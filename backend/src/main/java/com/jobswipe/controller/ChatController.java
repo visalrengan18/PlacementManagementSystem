@@ -18,6 +18,7 @@ import java.util.List;
 public class ChatController {
 
     private final ChatService chatService;
+    private final com.jobswipe.config.WebSocketEventListener webSocketEventListener;
 
     @GetMapping
     public ResponseEntity<List<ChatRoomDto>> getUserChats(@AuthenticationPrincipal User user) {
@@ -98,5 +99,10 @@ public class ChatController {
             @AuthenticationPrincipal User user,
             @PathVariable Long userId) {
         return ResponseEntity.ok(chatService.getOrCreateDirectChat(user.getId(), userId));
+    }
+
+    @GetMapping("/online")
+    public ResponseEntity<java.util.Set<Long>> getOnlineUsers() {
+        return ResponseEntity.ok(webSocketEventListener.getOnlineUsers());
     }
 }

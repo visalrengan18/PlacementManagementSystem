@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { followApi, connectionApi, directChatApi } from '../../api/networkApi';
 import './NetworkPage.css';
 
@@ -96,11 +96,13 @@ const NetworkPage = () => {
                 ) : (
                     connections.map(c => (
                         <div key={c.id} className="connection-card">
-                            <div className="connection-avatar">
+                            <Link to={`/profile/${c.user?.id}`} className="connection-avatar no-underline text-inherit block hover:opacity-80">
                                 {c.user?.name?.charAt(0) || '?'}
-                            </div>
+                            </Link>
                             <div className="connection-info">
-                                <h3 className="connection-name">{c.user?.name}</h3>
+                                <Link to={`/profile/${c.user?.id}`} className="no-underline text-inherit hover:opacity-80">
+                                    <h3 className="connection-name">{c.user?.name}</h3>
+                                </Link>
                                 <p className="connection-title">{c.user?.title || c.user?.role}</p>
                             </div>
                             <div className="connection-actions">
@@ -121,11 +123,13 @@ const NetworkPage = () => {
                 ) : (
                     pending.map(c => (
                         <div key={c.id} className="connection-card">
-                            <div className="connection-avatar">
+                            <Link to={`/profile/${c.user?.id}`} className="connection-avatar no-underline text-inherit block hover:opacity-80">
                                 {c.user?.name?.charAt(0) || '?'}
-                            </div>
+                            </Link>
                             <div className="connection-info">
-                                <h3 className="connection-name">{c.user?.name}</h3>
+                                <Link to={`/profile/${c.user?.id}`} className="no-underline text-inherit hover:opacity-80">
+                                    <h3 className="connection-name">{c.user?.name}</h3>
+                                </Link>
                                 <p className="connection-title">{c.user?.title || 'Seeker'}</p>
                             </div>
                             <div className="connection-actions">
@@ -149,11 +153,13 @@ const NetworkPage = () => {
                 ) : (
                     followers.map(u => (
                         <div key={u.id} className="connection-card">
-                            <div className="connection-avatar">
+                            <Link to={`/profile/${u.id}`} className="connection-avatar no-underline text-inherit block hover:opacity-80">
                                 {u.name?.charAt(0) || '?'}
-                            </div>
+                            </Link>
                             <div className="connection-info">
-                                <h3 className="connection-name">{u.name}</h3>
+                                <Link to={`/profile/${u.id}`} className="no-underline text-inherit hover:opacity-80">
+                                    <h3 className="connection-name">{u.name}</h3>
+                                </Link>
                                 <p className="connection-title">{u.title || u.role}</p>
                             </div>
                             <div className="connection-actions">
@@ -174,11 +180,13 @@ const NetworkPage = () => {
                 ) : (
                     following.map(u => (
                         <div key={u.id} className="connection-card">
-                            <div className="connection-avatar">
+                            <Link to={`/profile/${u.id}`} className="connection-avatar no-underline text-inherit block hover:opacity-80">
                                 {u.name?.charAt(0) || '?'}
-                            </div>
+                            </Link>
                             <div className="connection-info">
-                                <h3 className="connection-name">{u.name}</h3>
+                                <Link to={`/profile/${u.id}`} className="no-underline text-inherit hover:opacity-80">
+                                    <h3 className="connection-name">{u.name}</h3>
+                                </Link>
                                 <p className="connection-title">{u.title || u.role}</p>
                             </div>
                             <div className="connection-actions">

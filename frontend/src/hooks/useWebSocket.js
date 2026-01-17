@@ -4,15 +4,20 @@ import { Client } from '@stomp/stompjs';
 
 const WS_URL = import.meta.env.VITE_WS_URL || 'http://localhost:8080/ws';
 
-export const useWebSocket = (matchId, onMessage) => {
+export const useWebSocket = (matchId, onMessage, onPresenceChange) => {
     const [connected, setConnected] = useState(false);
     const clientRef = useRef(null);
     const onMessageRef = useRef(onMessage);
+    const onPresenceChangeRef = useRef(onPresenceChange);
 
-    // Keep the callback ref updated
+    // Keep the callback refs updated
     useEffect(() => {
         onMessageRef.current = onMessage;
     }, [onMessage]);
+
+    useEffect(() => {
+        onPresenceChangeRef.current = onPresenceChange;
+    }, [onPresenceChange]);
 
     useEffect(() => {
         if (!matchId) return;
@@ -37,9 +42,18 @@ export const useWebSocket = (matchId, onMessage) => {
 
         client.onConnect = () => {
             setConnected(true);
+
+            // Subscribe to chat
             client.subscribe(`/topic/chat.${matchId}`, (message) => {
                 if (onMessageRef.current) {
                     onMessageRef.current(JSON.parse(message.body));
+                }
+            });
+
+            // Subscribe to presence
+            client.subscribe('/topic/presence', (message) => {
+                if (onPresenceChangeRef.current) {
+                    onPresenceChangeRef.current(JSON.parse(message.body));
                 }
             });
         };
@@ -57,7 +71,7 @@ export const useWebSocket = (matchId, onMessage) => {
                 clientRef.current = null;
             }
         };
-    }, [matchId]); // Only depend on matchId, not onMessage
+    }, [matchId]);
 
     const sendMessage = useCallback((content) => {
         if (clientRef.current && clientRef.current.connected) {

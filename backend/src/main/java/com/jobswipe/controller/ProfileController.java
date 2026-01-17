@@ -48,4 +48,9 @@ public class ProfileController {
     public ResponseEntity<CompanyProfileDto> getPublicCompanyProfile(@PathVariable Long id) {
         return ResponseEntity.ok(profileService.getPublicCompanyProfile(id));
     }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<Object> getPublicProfileByUserId(@PathVariable Long userId) {
+        return ResponseEntity.ok(profileService.getPublicProfileByUserId(userId));
+    }
 }

@@ -54,13 +54,15 @@ const SeekerMatches = () => {
                         {matches.map((match) => (
                             <div key={match.id} className="match-card">
                                 <div className="match-card-header">
-                                    <div className="company-logo-match">
+                                    <Link to={`/profile/${match.company?.userId}`} className="company-logo-match no-underline text-inherit">
                                         {match.company?.name?.charAt(0) || 'C'}
-                                    </div>
+                                    </Link>
                                     {!match.contacted && <span className="new-badge">New</span>}
                                 </div>
                                 <div className="match-card-body">
-                                    <h3>{match.company?.name || 'Company'}</h3>
+                                    <Link to={`/profile/${match.company?.userId}`} className="no-underline text-inherit hover:opacity-80">
+                                        <h3>{match.company?.name || 'Company'}</h3>
+                                    </Link>
                                     <p>{match.job?.title || 'Position'}</p>
                                     <span className="match-meta">{match.company?.location || ''}</span>
                                 </div>
@@ -84,4 +86,3 @@ const SeekerMatches = () => {
 };
 
 export default SeekerMatches;
-
