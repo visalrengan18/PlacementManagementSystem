@@ -11,6 +11,7 @@ import com.jobswipe.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -22,6 +23,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Override
     public List<NotificationDto> getNotifications(Long userId, int limit) {
@@ -74,7 +76,11 @@ public class NotificationServiceImpl implements NotificationService {
                 .relatedId(relatedId)
                 .build();
 
-        notificationRepository.save(notification);
+        notification = notificationRepository.save(notification);
+
+        // Broadcast notification to user
+        NotificationDto dto = toDto(notification);
+        messagingTemplate.convertAndSend("/topic/notifications/" + userId, dto);
     }
 
     private NotificationDto toDto(Notification notification) {
