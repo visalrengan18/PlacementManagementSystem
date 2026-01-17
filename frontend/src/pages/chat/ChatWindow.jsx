@@ -14,36 +14,86 @@ const ChatWindow = () => {
     const [newMessage, setNewMessage] = useState('');
     const [chatRoom, setChatRoom] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
+    const [isFetchingMore, setIsFetchingMore] = useState(false);
     const messagesEndRef = useRef(null);
+    const messagesContainerRef = useRef(null);
 
     const handleNewMessage = useCallback((message) => {
         setMessages((prev) => [...prev, message]);
+        // Scroll to bottom on new message
+        setTimeout(() => {
+            messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
     }, []);
 
     const { connected, sendMessage } = useWebSocket(matchId, handleNewMessage);
 
+    const loadMessages = async (pageNum, isInitial = false) => {
+        try {
+            if (!isInitial) setIsFetchingMore(true);
+
+            const messagesData = await chatApi.getMessages(matchId, pageNum);
+            // API returns sorting by createdAt DESC (newest first)
+            // We need to reverse to show oldest first (ASC)
+            const newMessages = messagesData.content.reverse();
+
+            if (isInitial) {
+                setMessages(newMessages);
+                setLoading(false);
+                // Scroll to bottom on initial load
+                setTimeout(() => {
+                    messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
+                }, 100);
+            } else {
+                setMessages((prev) => [...newMessages, ...prev]);
+                setIsFetchingMore(false);
+            }
+
+            setHasMore(!messagesData.last);
+        } catch (err) {
+            error('Failed to load messages');
+            setLoading(false);
+            setIsFetchingMore(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchInitialData = async () => {
             try {
-                const [roomData, messagesData] = await Promise.all([
-                    chatApi.getChatRoom(matchId),
-                    chatApi.getMessages(matchId),
-                ]);
+                const roomData = await chatApi.getChatRoom(matchId);
                 setChatRoom(roomData);
-                setMessages(messagesData);
+                await loadMessages(0, true);
+                setPage(0);
                 await chatApi.markAsRead(matchId);
             } catch (err) {
                 error('Failed to load chat');
-            } finally {
                 setLoading(false);
             }
         };
-        fetchData();
+        fetchInitialData();
     }, [matchId]);
 
-    useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [messages]);
+    const handleScroll = async (e) => {
+        const { scrollTop, scrollHeight } = e.target;
+        if (scrollTop === 0 && hasMore && !isFetchingMore) {
+            // Save current scroll height to restore position after loading
+            const currentScrollHeight = scrollHeight;
+
+            const nextPage = page + 1;
+            setPage(nextPage);
+            await loadMessages(nextPage);
+
+            // Restore scroll position
+            // We need to wait for DOM update to have new scrollHeight
+            requestAnimationFrame(() => {
+                if (messagesContainerRef.current) {
+                    messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight - currentScrollHeight;
+                }
+            });
+        }
+    };
 
     const handleSend = async (e) => {
         e.preventDefault();
@@ -55,6 +105,7 @@ const ChatWindow = () => {
             } else {
                 const msg = await chatApi.sendMessage(matchId, newMessage);
                 setMessages((prev) => [...prev, msg]);
+                messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
             }
             setNewMessage('');
         } catch (err) {
@@ -87,8 +138,18 @@ const ChatWindow = () => {
                     </span>
                 </div>
 
-                <div className="messages-container">
-                    {messages.length === 0 ? (
+                <div
+                    className="messages-container"
+                    onScroll={handleScroll}
+                    ref={messagesContainerRef}
+                >
+                    {isFetchingMore && (
+                        <div className="loading-more">
+                            <span className="spinner spinner-sm"></span> Loading history...
+                        </div>
+                    )}
+
+                    {messages.length === 0 && !loading ? (
                         <div className="no-messages">
                             <p>No messages yet. Say hello! 👋</p>
                         </div>

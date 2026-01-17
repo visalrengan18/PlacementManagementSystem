@@ -4,6 +4,9 @@ import com.jobswipe.domain.entity.User;
 import com.jobswipe.dto.chat.*;
 import com.jobswipe.service.ChatService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -30,10 +33,13 @@ public class ChatController {
     }
 
     @GetMapping("/{matchId}/messages")
-    public ResponseEntity<List<MessageDto>> getMessages(
+    public ResponseEntity<Page<MessageDto>> getMessages(
             @AuthenticationPrincipal User user,
-            @PathVariable Long matchId) {
-        return ResponseEntity.ok(chatService.getMessages(user.getId(), matchId));
+            @PathVariable Long matchId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        return ResponseEntity.ok(chatService.getMessages(user.getId(), matchId,
+                PageRequest.of(page, size, Sort.by("createdAt").descending())));
     }
 
     @PostMapping("/{matchId}/messages")
@@ -61,10 +67,13 @@ public class ChatController {
     }
 
     @GetMapping("/room/{chatRoomId}/messages")
-    public ResponseEntity<List<MessageDto>> getMessagesByChatRoomId(
+    public ResponseEntity<Page<MessageDto>> getMessagesByChatRoomId(
             @AuthenticationPrincipal User user,
-            @PathVariable Long chatRoomId) {
-        return ResponseEntity.ok(chatService.getMessagesByChatRoomId(user.getId(), chatRoomId));
+            @PathVariable Long chatRoomId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        return ResponseEntity.ok(chatService.getMessagesByChatRoomId(user.getId(), chatRoomId,
+                PageRequest.of(page, size, Sort.by("createdAt").descending())));
     }
 
     @PostMapping("/room/{chatRoomId}/messages")
