@@ -47,7 +47,7 @@ public class FollowServiceImpl implements FollowService {
         // Notify the user being followed
         notificationService.createNotification(
                 targetUserId,
-                NotificationType.PROFILE_VIEW,
+                NotificationType.FOLLOW,
                 "New Follower",
                 follower.getName() + " started following you",
                 userId);

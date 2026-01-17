@@ -12,6 +12,7 @@ import Register from './pages/auth/Register';
 // Seeker Pages
 import SeekerDashboard from './pages/seeker/SeekerDashboard';
 import JobSwipe from './pages/seeker/JobSwipe';
+import JobDetails from './pages/seeker/JobDetails';
 import SeekerProfile from './pages/seeker/SeekerProfile';
 import Applications from './pages/seeker/Applications';
 import SeekerMatches from './pages/seeker/SeekerMatches';
@@ -67,6 +68,7 @@ function App() {
               {/* Seeker Routes */}
               <Route path="/seeker/dashboard" element={<ProtectedRoute requiredRole="SEEKER"><SeekerDashboard /></ProtectedRoute>} />
               <Route path="/seeker/jobs" element={<ProtectedRoute requiredRole="SEEKER"><JobSwipe /></ProtectedRoute>} />
+              <Route path="/seeker/jobs/view/:jobId" element={<ProtectedRoute requiredRole="SEEKER"><JobDetails /></ProtectedRoute>} />
               <Route path="/seeker/profile" element={<ProtectedRoute requiredRole="SEEKER"><SeekerProfile /></ProtectedRoute>} />
               <Route path="/seeker/applications" element={<ProtectedRoute requiredRole="SEEKER"><Applications /></ProtectedRoute>} />
               <Route path="/seeker/matches" element={<ProtectedRoute requiredRole="SEEKER"><SeekerMatches /></ProtectedRoute>} />

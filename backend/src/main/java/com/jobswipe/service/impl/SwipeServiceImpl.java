@@ -105,7 +105,7 @@ public class SwipeServiceImpl implements SwipeService {
                                 NotificationType.MATCH,
                                 "It's a Match! 🎉",
                                 "You matched with " + companyName + " for " + jobTitle,
-                                match.getId());
+                                application.getJob().getId());
 
                 // Notify company
                 notificationService.createNotification(
@@ -113,7 +113,7 @@ public class SwipeServiceImpl implements SwipeService {
                                 NotificationType.MATCH,
                                 "It's a Match! 🎉",
                                 "You matched with " + seekerName + " for " + jobTitle,
-                                match.getId());
+                                application.getSeeker().getUser().getId());
 
                 return SwipeResponse.builder().success(true).isMatch(true).message("It's a match!").build();
         }
