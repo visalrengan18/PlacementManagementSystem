@@ -6,8 +6,8 @@ import chatApi from '../../api/chatApi';
 import useWebSocket from '../../hooks/useWebSocket';
 import './Chat.css';
 
-const ChatWindow = () => {
-    const { matchId } = useParams();
+const ChatRoomWindow = () => {
+    const { chatRoomId } = useParams();
     const { user } = useAuth();
     const { error } = useNotification();
     const [messages, setMessages] = useState([]);
@@ -20,18 +20,18 @@ const ChatWindow = () => {
         setMessages((prev) => [...prev, message]);
     }, []);
 
-    const { connected, sendMessage } = useWebSocket(matchId, handleNewMessage);
+    const { connected, sendMessage } = useWebSocket(chatRoomId, handleNewMessage);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const [roomData, messagesData] = await Promise.all([
-                    chatApi.getChatRoom(matchId),
-                    chatApi.getMessages(matchId),
+                    chatApi.getChatRoomById(chatRoomId),
+                    chatApi.getMessagesByChatRoomId(chatRoomId),
                 ]);
                 setChatRoom(roomData);
                 setMessages(messagesData);
-                await chatApi.markAsRead(matchId);
+                await chatApi.markChatRoomAsRead(chatRoomId);
             } catch (err) {
                 error('Failed to load chat');
             } finally {
@@ -39,7 +39,7 @@ const ChatWindow = () => {
             }
         };
         fetchData();
-    }, [matchId]);
+    }, [chatRoomId]);
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -53,7 +53,7 @@ const ChatWindow = () => {
             if (connected) {
                 sendMessage(newMessage);
             } else {
-                const msg = await chatApi.sendMessage(matchId, newMessage);
+                const msg = await chatApi.sendMessageToChatRoom(chatRoomId, newMessage);
                 setMessages((prev) => [...prev, msg]);
             }
             setNewMessage('');
@@ -75,7 +75,7 @@ const ChatWindow = () => {
         <div className="page-container">
             <div className="chat-page">
                 <div className="chat-header">
-                    <Link to={user?.role === 'SEEKER' ? '/seeker/matches' : '/company/matches'} className="back-btn">← Back</Link>
+                    <Link to="/chats" className="back-btn">← Back</Link>
                     <div className="chat-header-info">
                         <div className="chat-avatar">{chatRoom?.otherUserName?.charAt(0) || 'U'}</div>
                         <div>
@@ -127,4 +127,4 @@ const ChatWindow = () => {
     );
 };
 
-export default ChatWindow;
+export default ChatRoomWindow;

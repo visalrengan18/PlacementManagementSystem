@@ -30,6 +30,7 @@ import CompanyProfile from './pages/company/CompanyProfile';
 // Chat Pages
 import ChatList from './pages/chat/ChatList';
 import ChatWindow from './pages/chat/ChatWindow';
+import ChatRoomWindow from './pages/chat/ChatRoomWindow';
 
 import './styles/global.css';
 import './styles/components.css';
@@ -79,6 +80,7 @@ function App() {
               {/* Chat Routes */}
               <Route path="/chats" element={<ProtectedRoute><ChatList /></ProtectedRoute>} />
               <Route path="/chat/:matchId" element={<ProtectedRoute><ChatWindow /></ProtectedRoute>} />
+              <Route path="/chat/room/:chatRoomId" element={<ProtectedRoute><ChatRoomWindow /></ProtectedRoute>} />
 
               {/* 404 */}
               <Route path="*" element={<Navigate to="/" replace />} />
