@@ -28,19 +28,30 @@ public class SearchServiceImpl implements SearchService {
 
         if (query == null || query.trim().isEmpty()) {
             // Return recent users if no query
-            users = userRepository.findAll().stream()
+            List<User> allUsers = userRepository.findAll();
+
+            if ("seeker".equalsIgnoreCase(type)) {
+                users = allUsers.stream()
+                        .filter(u -> u.getRole() == Role.SEEKER)
+                        .collect(Collectors.toList());
+            } else if ("company".equalsIgnoreCase(type)) {
+                users = allUsers.stream()
+                        .filter(u -> u.getRole() == Role.COMPANY)
+                        .collect(Collectors.toList());
+            } else {
+                users = allUsers;
+            }
+
+            users = users.stream()
                     .filter(u -> !u.getId().equals(currentUserId))
                     .limit(20)
                     .collect(Collectors.toList());
         } else {
-            String searchQuery = "%" + query.toLowerCase() + "%";
-
             if ("seeker".equalsIgnoreCase(type)) {
                 users = userRepository.findByRoleAndNameContainingIgnoreCase(Role.SEEKER, query);
             } else if ("company".equalsIgnoreCase(type)) {
                 users = userRepository.findByRoleAndNameContainingIgnoreCase(Role.COMPANY, query);
             } else {
-                // Search all
                 users = userRepository.findByNameContainingIgnoreCase(query);
             }
         }
