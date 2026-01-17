@@ -103,6 +103,20 @@ const Navbar = () => {
                                 💬 Messages
                             </Link>
 
+                            <Link
+                                to="/search"
+                                className={`nav-link ${isActive('/search') ? 'active' : ''}`}
+                            >
+                                🔍 Search
+                            </Link>
+
+                            <Link
+                                to="/network"
+                                className={`nav-link ${isActive('/network') ? 'active' : ''}`}
+                            >
+                                🌐 Network
+                            </Link>
+
                             <NotificationDropdown />
 
                             <div className="navbar-user">
