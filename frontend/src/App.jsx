@@ -1,7 +1,9 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { NotificationProvider } from './context/NotificationContext';
+
 import Navbar from './components/common/Navbar';
+import Footer from './components/common/Footer';
 import Notification from './components/common/Notification';
 import ProtectedRoute from './components/common/ProtectedRoute';
 
@@ -101,6 +103,7 @@ function App() {
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </main>
+            <Footer />
           </div>
         </NotificationProvider>
       </AuthProvider>
@@ -109,4 +112,5 @@ function App() {
 }
 
 export default App;
+
 

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import NotificationDropdown from './NotificationDropdown';
+
 import './Navbar.css';
 
 const Navbar = () => {
@@ -26,6 +27,7 @@ const Navbar = () => {
                 <Link to="/" className="navbar-brand" onClick={closeMenu}>
                     <span className="brand-text">JobSwipe</span>
                 </Link>
+
 
                 <button className="mobile-menu-btn" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                     {isMenuOpen ? '✕' : '☰'}
