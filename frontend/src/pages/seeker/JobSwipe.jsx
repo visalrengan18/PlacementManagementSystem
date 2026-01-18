@@ -76,17 +76,18 @@ const JobSwipe = () => {
     }
 
     return (
-        <div className="page-container">
-            <div className="swipe-page">
-                <div className="swipe-header">
-                    <h1 className="swipe-title">Find Your Dream Job</h1>
-                    <p className="swipe-subtitle">
-                        {hasMoreJobs
-                            ? `${jobs.length - currentIndex} jobs waiting for you`
-                            : 'You\'ve seen all available jobs'}
-                    </p>
-                </div>
+        <div className="page-container" style={{ paddingTop: 0 }}>
+            {/* Curved Header Section */}
+            <div className="section-curve-bottom" style={{ paddingTop: 'calc(var(--header-height) + 2rem)', paddingLeft: '1rem', paddingRight: '1rem', textAlign: 'center' }}>
+                <h1 className="swipe-title">Find Your Dream Job</h1>
+                <p className="swipe-subtitle">
+                    {hasMoreJobs
+                        ? `${jobs.length - currentIndex} opportunities waiting for you`
+                        : 'You\'ve seen all available jobs'}
+                </p>
+            </div>
 
+            <div className="swipe-page">
                 <div className="swipe-container">
                     {hasMoreJobs ? (
                         <>
@@ -95,8 +96,9 @@ const JobSwipe = () => {
                                     key={job.id}
                                     className="swipe-card-bg"
                                     style={{
-                                        transform: `scale(${1 - (index + 1) * 0.05}) translateY(${(index + 1) * 10}px)`,
+                                        transform: `scale(${1 - (index + 1) * 0.05}) translateY(${(index + 1) * 12}px)`,
                                         zIndex: -index - 1,
+                                        opacity: 0.6 - (index * 0.2)
                                     }}
                                 />
                             ))}
@@ -109,13 +111,13 @@ const JobSwipe = () => {
                             </SwipeCard>
                         </>
                     ) : (
-                        <div className="empty-state">
-                            <div className="empty-state-icon animate-float">🎯</div>
+                        <div className="empty-state glass-card p-8 text-center animate-fade-in-up">
+                            <div className="empty-state-icon animate-float" style={{ fontSize: '4rem', marginBottom: '1rem' }}>🎉</div>
                             <h2 className="empty-state-title">You're all caught up!</h2>
-                            <p className="empty-state-text">
+                            <p className="empty-state-text text-muted">
                                 You've swiped through all available jobs. Check back later for new opportunities!
                             </p>
-                            <button onClick={handleRefresh} className="btn btn-primary">
+                            <button onClick={handleRefresh} className="btn btn-primary mt-4">
                                 <span>🔄</span> Refresh Jobs
                             </button>
                         </div>
@@ -123,7 +125,7 @@ const JobSwipe = () => {
                 </div>
 
                 {hasMoreJobs && (
-                    <div className="swipe-progress">
+                    <div className="swipe-progress animate-fade-in">
                         <span className="progress-text">
                             {currentIndex + 1} / {jobs.length}
                         </span>

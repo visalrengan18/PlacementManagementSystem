@@ -14,6 +14,7 @@ const Register = () => {
     });
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
+    const [isExiting, setIsExiting] = useState(false);
 
     const { register } = useAuth();
     const { error: showError, success: showSuccess } = useNotification();
@@ -59,20 +60,29 @@ const Register = () => {
                 password: formData.password,
                 role: formData.role,
             });
-            showSuccess('Account created successfully! Welcome aboard! 🎉');
-            // Redirect based on role
-            const redirectPath = user.role === 'SEEKER' ? '/seeker/profile' : '/company/profile';
-            navigate(redirectPath, { replace: true });
+            // Success Trigger
+            setIsExiting(true);
+            setTimeout(() => {
+                showSuccess('Account created successfully! Welcome aboard! 🎉');
+                const redirectPath = user.role === 'SEEKER' ? '/seeker/profile' : '/company/profile';
+                navigate(redirectPath, { replace: true });
+            }, 500);
         } catch (err) {
             showError(err.message || 'Registration failed. Please try again.');
-        } finally {
             setLoading(false);
         }
     };
 
     return (
         <div className="auth-page">
-            <div className="auth-container auth-container-wide animate-fade-in-up">
+            <div className={`auth-container auth-container-wide animate-scale-in ${isExiting ? 'animate-fade-out-down' : ''}`}>
+
+                {/* Sliding Toggle */}
+                <div className="auth-toggle-wrapper">
+                    <Link to="/login" className="auth-toggle-btn">Login</Link>
+                    <Link to="/register" className="auth-toggle-btn active">Sign Up</Link>
+                </div>
+
                 <div className="auth-header">
                     <div className="auth-logo">💼</div>
                     <h1 className="auth-title">Create Account</h1>
@@ -89,7 +99,7 @@ const Register = () => {
                         >
                             <span className="role-icon">👤</span>
                             <span className="role-label">Job Seeker</span>
-                            <span className="role-desc">Looking for opportunities</span>
+                            <span className="role-desc">I want a job</span>
                         </button>
                         <button
                             type="button"
@@ -98,78 +108,74 @@ const Register = () => {
                         >
                             <span className="role-icon">🏢</span>
                             <span className="role-label">Company</span>
-                            <span className="role-desc">Hiring talent</span>
+                            <span className="role-desc">I am hiring</span>
                         </button>
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="name" className="form-label">
-                            {formData.role === 'SEEKER' ? 'Full Name' : 'Company Name'}
-                        </label>
                         <input
                             type="text"
                             id="name"
                             name="name"
                             className={`form-input ${errors.name ? 'error' : ''}`}
-                            placeholder={formData.role === 'SEEKER' ? 'John Doe' : 'Acme Inc.'}
+                            placeholder=" "
                             value={formData.name}
                             onChange={handleChange}
                         />
+                        <label htmlFor="name" className="form-label">
+                            {formData.role === 'SEEKER' ? 'Full Name' : 'Company Name'}
+                        </label>
                         {errors.name && <span className="form-error">{errors.name}</span>}
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="email" className="form-label">Email</label>
                         <input
                             type="email"
                             id="email"
                             name="email"
                             className={`form-input ${errors.email ? 'error' : ''}`}
-                            placeholder="you@example.com"
+                            placeholder=" "
                             value={formData.email}
                             onChange={handleChange}
                         />
+                        <label htmlFor="email" className="form-label">Email Address</label>
                         {errors.email && <span className="form-error">{errors.email}</span>}
                     </div>
 
-                    <div className="form-row">
+                    <div className="form-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                         <div className="form-group">
-                            <label htmlFor="password" className="form-label">Password</label>
                             <input
                                 type="password"
                                 id="password"
                                 name="password"
                                 className={`form-input ${errors.password ? 'error' : ''}`}
-                                placeholder="••••••••"
+                                placeholder=" "
                                 value={formData.password}
                                 onChange={handleChange}
                             />
+                            <label htmlFor="password" className="form-label">Password</label>
                             {errors.password && <span className="form-error">{errors.password}</span>}
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
                             <input
                                 type="password"
                                 id="confirmPassword"
                                 name="confirmPassword"
                                 className={`form-input ${errors.confirmPassword ? 'error' : ''}`}
-                                placeholder="••••••••"
+                                placeholder=" "
                                 value={formData.confirmPassword}
                                 onChange={handleChange}
                             />
+                            <label htmlFor="confirmPassword" className="form-label">Confirm</label>
                             {errors.confirmPassword && <span className="form-error">{errors.confirmPassword}</span>}
                         </div>
                     </div>
 
-                    <button type="submit" className="btn btn-primary btn-lg w-full" disabled={loading}>
-                        {loading ? <span className="spinner"></span> : 'Create Account'}
+                    <button type="submit" className="btn btn-primary" disabled={loading}>
+                        {loading ? 'Creating Account...' : 'Create Account'}
                     </button>
                 </form>
-
-                <p className="auth-footer">
-                    Already have an account? <Link to="/login">Sign in</Link>
-                </p>
             </div>
         </div>
     );
