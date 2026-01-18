@@ -10,6 +10,8 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
 
+    const [isExiting, setIsExiting] = useState(false);
+
     const { login } = useAuth();
     const { error: showError, success: showSuccess } = useNotification();
     const navigate = useNavigate();
@@ -34,13 +36,15 @@ const Login = () => {
         setLoading(true);
         try {
             const user = await login(email, password);
-            showSuccess(`Welcome back, ${user.name}! 🎉`);
-            // Redirect based on role
-            const redirectPath = user.role === 'SEEKER' ? '/seeker/dashboard' : '/company/dashboard';
-            navigate(from !== '/' ? from : redirectPath, { replace: true });
+            // Success Animation Trigger
+            setIsExiting(true);
+            setTimeout(() => {
+                showSuccess(`Welcome back, ${user.name}! 🎉`);
+                const redirectPath = user.role === 'SEEKER' ? '/seeker/dashboard' : '/company/dashboard';
+                navigate(from !== '/' ? from : redirectPath, { replace: true });
+            }, 500); // Wait for exit animation (0.5s)
         } catch (err) {
             showError(err.message || 'Login failed. Please check your credentials.');
-        } finally {
             setLoading(false);
         }
     };
@@ -57,47 +61,58 @@ const Login = () => {
 
     return (
         <div className="auth-page">
-            <div className="auth-container animate-fade-in-up">
+            <div className={`auth-container animate-scale-in ${isExiting ? 'animate-fade-out-down' : ''}`}>
+
+                {/* Sliding Toggle */}
+                <div className="auth-toggle-wrapper">
+                    <Link to="/login" className="auth-toggle-btn active">Login</Link>
+                    <Link to="/register" className="auth-toggle-btn">Sign Up</Link>
+                </div>
+
                 <div className="auth-header">
                     <div className="auth-logo">💼</div>
                     <h1 className="auth-title">Welcome Back</h1>
-                    <p className="auth-subtitle">Sign in to continue your job search journey</p>
+                    <p className="auth-subtitle">Enter your details to access your account</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="auth-form">
                     <div className="form-group">
-                        <label htmlFor="email" className="form-label">Email</label>
                         <input
                             type="email"
                             id="email"
                             className={`form-input ${errors.email ? 'error' : ''}`}
-                            placeholder="you@example.com"
+                            placeholder=" " /* Placeholder needed for :placeholder-shown trick */
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
+                        <label htmlFor="email" className="form-label">Email Address</label>
                         {errors.email && <span className="form-error">{errors.email}</span>}
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="password" className="form-label">Password</label>
                         <input
                             type="password"
                             id="password"
                             className={`form-input ${errors.password ? 'error' : ''}`}
-                            placeholder="••••••••"
+                            placeholder=" "
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
+                        <label htmlFor="password" className="form-label">Password</label>
                         {errors.password && <span className="form-error">{errors.password}</span>}
                     </div>
 
-                    <button type="submit" className="btn btn-primary btn-lg w-full" disabled={loading}>
-                        {loading ? <span className="spinner"></span> : 'Sign In'}
+                    <div style={{ textAlign: 'right', marginBottom: '1.5rem' }}>
+                        {/* Optional: Forgot Password Link could go here */}
+                    </div>
+
+                    <button type="submit" className="btn btn-primary" disabled={loading}>
+                        {loading ? 'Signing In...' : 'Sign In'}
                     </button>
                 </form>
 
                 <div className="auth-divider">
-                    <span>or try demo accounts</span>
+                    <span>or continue with</span>
                 </div>
 
                 <div className="demo-buttons">
@@ -106,20 +121,16 @@ const Login = () => {
                         className="btn btn-secondary"
                         onClick={() => handleDemoLogin('SEEKER')}
                     >
-                        👤 Demo Seeker
+                        Demo Seeker
                     </button>
                     <button
                         type="button"
                         className="btn btn-secondary"
                         onClick={() => handleDemoLogin('COMPANY')}
                     >
-                        🏢 Demo Company
+                        Demo Company
                     </button>
                 </div>
-
-                <p className="auth-footer">
-                    Don't have an account? <Link to="/register">Create one</Link>
-                </p>
             </div>
         </div>
     );

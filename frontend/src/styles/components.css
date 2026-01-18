@@ -1,4 +1,6 @@
-/* Button Styles */
+/* ============================================
+   LUXURY BUTTON STYLES
+   ============================================ */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -20,25 +22,26 @@
 }
 
 .btn-primary {
-    background: var(--gradient-primary);
+    background: var(--gradient-gold);
     color: white;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-luxury);
 }
 
 .btn-primary:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-md), 0 0 20px rgba(99, 102, 241, 0.4);
+    box-shadow: var(--shadow-luxury-hover), 0 0 20px rgba(197, 160, 89, 0.3);
 }
 
 .btn-secondary {
     background: var(--color-bg-elevated);
     color: var(--color-text-primary);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .btn-secondary:hover:not(:disabled) {
-    background: var(--color-bg-card);
-    border-color: var(--color-primary);
+    background: white;
+    border-color: var(--color-gold);
+    color: var(--color-gold-dark);
 }
 
 .btn-success {
@@ -67,7 +70,7 @@
 }
 
 .btn-ghost:hover:not(:disabled) {
-    background: var(--color-bg-elevated);
+    background: var(--color-bg-secondary);
     color: var(--color-text-primary);
 }
 
@@ -94,16 +97,28 @@
     font-size: var(--font-size-xl);
 }
 
-/* Card Styles */
+/* ============================================
+   LUXURY CARD STYLES
+   ============================================ */
 .card {
-    background: var(--color-bg-card);
-    border-radius: var(--radius-xl);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-elevated);
+    border-radius: var(--radius-card);
+    /* 24px super-ellipse */
+    border: 1px solid rgba(0, 0, 0, 0.04);
     overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
 }
 
 .card-elevated {
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-luxury);
+}
+
+.card-elevated:hover {
+    box-shadow: var(--shadow-luxury-hover);
 }
 
 .card-glow {
@@ -111,12 +126,12 @@
 }
 
 .card-gradient {
-    background: var(--gradient-card);
+    background: var(--gradient-surface);
 }
 
 .card-header {
     padding: var(--spacing-lg);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .card-body {
@@ -125,10 +140,12 @@
 
 .card-footer {
     padding: var(--spacing-lg);
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid rgba(0, 0, 0, 0.04);
 }
 
-/* Input Styles */
+/* ============================================
+   LUXURY INPUT STYLES
+   ============================================ */
 .form-group {
     margin-bottom: var(--spacing-lg);
 }
@@ -144,8 +161,8 @@
 .form-input {
     width: 100%;
     padding: var(--spacing-md);
-    background: var(--color-bg-secondary);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: var(--radius-lg);
     color: var(--color-text-primary);
     font-size: var(--font-size-base);
@@ -154,8 +171,8 @@
 
 .form-input:focus {
     outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.12);
 }
 
 .form-input::placeholder {
@@ -177,7 +194,9 @@
     resize: vertical;
 }
 
-/* Badge Styles */
+/* ============================================
+   LUXURY BADGE STYLES
+   ============================================ */
 .badge {
     display: inline-flex;
     align-items: center;
@@ -190,8 +209,8 @@
 }
 
 .badge-primary {
-    background: rgba(99, 102, 241, 0.2);
-    color: var(--color-primary-light);
+    background: rgba(99, 102, 241, 0.12);
+    color: var(--color-primary);
 }
 
 .badge-success {
@@ -205,17 +224,25 @@
 }
 
 .badge-warning {
-    background: rgba(245, 158, 11, 0.2);
+    background: rgba(245, 158, 11, 0.12);
     color: var(--color-warning);
 }
 
-/* Avatar Styles */
+.badge-gold {
+    background: rgba(197, 160, 89, 0.12);
+    color: var(--color-gold-dark);
+}
+
+/* ============================================
+   AVATAR STYLES
+   ============================================ */
 .avatar {
     width: 48px;
     height: 48px;
     border-radius: var(--radius-full);
     object-fit: cover;
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    box-shadow: var(--shadow-sm);
 }
 
 .avatar-sm {
@@ -233,39 +260,50 @@
     height: 96px;
 }
 
-/* Tag/Chip Styles */
+/* ============================================
+   TAG/CHIP STYLES
+   ============================================ */
 .tag {
     display: inline-flex;
     align-items: center;
     gap: var(--spacing-xs);
     padding: var(--spacing-xs) var(--spacing-md);
-    background: var(--color-bg-elevated);
+    background: var(--color-bg-secondary);
     border-radius: var(--radius-full);
     font-size: var(--font-size-sm);
     color: var(--color-text-secondary);
 }
 
 .tag-primary {
-    background: rgba(99, 102, 241, 0.15);
-    color: var(--color-primary-light);
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--color-primary);
 }
 
-/* Divider */
+.tag-gold {
+    background: rgba(197, 160, 89, 0.1);
+    color: var(--color-gold-dark);
+}
+
+/* ============================================
+   DIVIDER
+   ============================================ */
 .divider {
     height: 1px;
     background: linear-gradient(90deg,
             transparent,
-            rgba(255, 255, 255, 0.1),
+            rgba(0, 0, 0, 0.06),
             transparent);
     margin: var(--spacing-lg) 0;
 }
 
-/* Loading Spinner */
+/* ============================================
+   LOADING SPINNER
+   ============================================ */
 .spinner {
     width: 24px;
     height: 24px;
-    border: 3px solid var(--color-bg-elevated);
-    border-top-color: var(--color-primary);
+    border: 3px solid var(--color-bg-secondary);
+    border-top-color: var(--color-gold);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
 }
@@ -276,7 +314,15 @@
     border-width: 4px;
 }
 
-/* Empty State */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ============================================
+   EMPTY STATE
+   ============================================ */
 .empty-state {
     display: flex;
     flex-direction: column;
@@ -289,12 +335,14 @@
 .empty-state-icon {
     font-size: 4rem;
     margin-bottom: var(--spacing-lg);
-    opacity: 0.5;
+    opacity: 0.4;
+    color: var(--color-gold);
 }
 
 .empty-state-title {
+    font-family: var(--font-serif);
     font-size: var(--font-size-xl);
-    font-weight: 600;
+    font-weight: 500;
     margin-bottom: var(--spacing-sm);
 }
 

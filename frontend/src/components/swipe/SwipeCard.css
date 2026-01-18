@@ -1,3 +1,6 @@
+/* ============================================
+   LUXURY SWIPE CARD - Midnight Gold
+   ============================================ */
 .swipe-card-wrapper {
     display: flex;
     flex-direction: column;
@@ -5,69 +8,94 @@
     width: 100%;
     max-width: 400px;
     margin: 0 auto;
+    perspective: 1000px;
 }
 
 .swipe-card {
     position: relative;
     width: 100%;
     aspect-ratio: 3 / 4;
-    background: var(--color-bg-card);
-    border-radius: var(--radius-2xl);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: var(--shadow-lg);
+    background: var(--color-bg-elevated);
+    border-radius: var(--radius-card);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+
+    /* Luxury Shadow - Dark with gold glow */
+    box-shadow: var(--shadow-luxury);
+
     overflow: hidden;
     user-select: none;
     touch-action: none;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+    will-change: transform, box-shadow;
+}
+
+.swipe-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-luxury-hover);
+    border-color: rgba(212, 175, 55, 0.2);
 }
 
 .swipe-card.dragging {
-    box-shadow: var(--shadow-lg), 0 20px 60px rgba(0, 0, 0, 0.4);
+    cursor: grabbing;
+    transform: scale(1.02);
+    box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.5);
 }
 
 .swipe-card.swipe-right {
-    box-shadow: var(--shadow-lg), 0 0 40px rgba(16, 185, 129, 0.4);
+    box-shadow:
+        var(--shadow-luxury),
+        0 0 60px rgba(16, 185, 129, 0.3);
 }
 
 .swipe-card.swipe-left {
-    box-shadow: var(--shadow-lg), 0 0 40px rgba(239, 68, 68, 0.4);
+    box-shadow:
+        var(--shadow-luxury),
+        0 0 60px rgba(239, 68, 68, 0.3);
 }
 
 /* Swipe indicators */
 .swipe-indicator {
     position: absolute;
-    top: 30px;
-    padding: var(--spacing-sm) var(--spacing-lg);
-    border-radius: var(--radius-lg);
+    top: 40px;
+    padding: 12px 24px;
+    border-radius: var(--radius-xl);
     font-weight: 700;
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-xl);
     letter-spacing: 2px;
     opacity: 0;
-    transform: scale(0.8);
-    transition: all 0.2s ease;
-    z-index: 10;
+    transform: scale(0.5);
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 20;
+    backdrop-filter: blur(8px);
 }
 
 .swipe-indicator.visible {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) rotate(0deg);
 }
 
 .swipe-indicator-right {
-    right: 20px;
-    background: var(--color-success-bg);
+    left: 40px;
+    background: rgba(16, 185, 129, 0.2);
     color: var(--color-success);
     border: 2px solid var(--color-success);
-    transform-origin: right center;
-    rotate: 15deg;
+    transform: rotate(-15deg) scale(0.5);
+}
+
+.swipe-indicator-right.visible {
+    transform: rotate(-15deg) scale(1);
 }
 
 .swipe-indicator-left {
-    left: 20px;
-    background: var(--color-danger-bg);
+    right: 40px;
+    background: rgba(239, 68, 68, 0.2);
     color: var(--color-danger);
     border: 2px solid var(--color-danger);
-    transform-origin: left center;
-    rotate: -15deg;
+    transform: rotate(15deg) scale(0.5);
+}
+
+.swipe-indicator-left.visible {
+    transform: rotate(15deg) scale(1);
 }
 
 .swipe-card-content {
@@ -75,66 +103,79 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    background: var(--gradient-surface);
 }
 
 /* Action buttons */
 .swipe-actions {
     display: flex;
     justify-content: center;
-    gap: var(--spacing-xl);
-    margin-top: var(--spacing-xl);
+    gap: var(--spacing-2xl);
+    margin-top: var(--spacing-2xl);
+    padding-bottom: var(--spacing-lg);
 }
 
 .swipe-btn {
-    width: 64px;
-    height: 64px;
+    width: 72px;
+    height: 72px;
     border-radius: var(--radius-full);
     border: none;
-    font-size: var(--font-size-xl);
+    font-size: 1.75rem;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     display: flex;
     align-items: center;
     justify-content: center;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    box-shadow: var(--shadow-luxury);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.swipe-btn:hover:not(:disabled) {
+    transform: translateY(-4px) scale(1.08);
+    box-shadow: var(--shadow-luxury-hover);
+}
+
+.swipe-btn:active:not(:disabled) {
+    transform: translateY(0) scale(0.95);
 }
 
 .swipe-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    transform: none;
 }
 
 .swipe-btn-left {
-    background: var(--color-bg-elevated);
     color: var(--color-danger);
-    border: 2px solid var(--color-danger);
 }
 
 .swipe-btn-left:hover:not(:disabled) {
-    background: var(--color-danger);
-    color: white;
-    transform: scale(1.1);
+    background: rgba(239, 68, 68, 0.1);
+    border-color: var(--color-danger);
+    box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);
 }
 
 .swipe-btn-right {
-    background: var(--color-bg-elevated);
     color: var(--color-success);
-    border: 2px solid var(--color-success);
 }
 
 .swipe-btn-right:hover:not(:disabled) {
-    background: var(--color-success);
-    color: white;
-    transform: scale(1.1);
+    background: rgba(16, 185, 129, 0.1);
+    border-color: var(--color-success);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
 }
 
 /* Responsive */
 @media (max-width: 480px) {
     .swipe-card {
-        aspect-ratio: 2.5 / 4;
+        aspect-ratio: 75 / 100;
     }
 
     .swipe-btn {
-        width: 56px;
-        height: 56px;
+        width: 64px;
+        height: 64px;
+        font-size: 1.5rem;
     }
 }

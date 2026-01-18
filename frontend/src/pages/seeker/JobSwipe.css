@@ -37,14 +37,18 @@
 }
 
 /* Background cards for stack effect */
+/* Background cards for stack effect */
 .swipe-card-bg {
     position: absolute;
     width: 100%;
     max-width: 400px;
     aspect-ratio: 3 / 4;
-    background: var(--color-bg-elevated);
+    background: white;
     border-radius: var(--radius-2xl);
     opacity: 0.5;
+    /* Soft shadow for depth even on background cards */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 /* Loading state */
