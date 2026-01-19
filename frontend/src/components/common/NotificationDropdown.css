@@ -10,11 +10,18 @@
     padding: 0.5rem;
     font-size: 1.25rem;
     color: var(--color-text-secondary);
-    transition: color var(--transition-fast);
+    transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .notification-btn:hover {
     color: var(--color-primary-light);
+    animation: bell-hover-shake 200ms ease-out;
+}
+
+/* Bell shake animation when there are unread notifications */
+.notification-btn.has-unread {
+    animation: bell-shake 0.5s ease-in-out;
+    animation-delay: 1s;
 }
 
 .notification-badge {
@@ -32,6 +39,9 @@
     align-items: center;
     justify-content: center;
     padding: 0 4px;
+
+    /* Slow pulse animation (3-4s interval) */
+    animation: badge-slow-pulse 3.5s ease-in-out infinite;
 }
 
 .notification-panel {
@@ -48,6 +58,10 @@
     overflow: hidden;
     z-index: var(--z-dropdown);
     margin-top: 0.5rem;
+
+    /* Dropdown scale-in animation */
+    animation: dropdown-scale-in 250ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    transform-origin: top right;
 }
 
 .notification-header {

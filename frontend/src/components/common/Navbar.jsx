@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import NotificationDropdown from './NotificationDropdown';
+import AvatarRing from './AvatarRing';
 
 import './Navbar.css';
 
@@ -64,9 +65,10 @@ const Navbar = () => {
 
                             <div className="navbar-user">
                                 <Link to={isSeeker ? '/seeker/profile' : '/company/profile'} className="user-avatar-btn" onClick={closeMenu}>
-                                    <div className="user-avatar">
-                                        {user?.name?.charAt(0).toUpperCase() || 'U'}
-                                    </div>
+                                    <AvatarRing
+                                        size="md"
+                                        name={user?.name}
+                                    />
                                 </Link>
                                 <button onClick={handleLogout} className="nav-link" style={{ fontSize: '12px', border: 'none', background: 'none', cursor: 'pointer' }}>
                                     Logout

@@ -93,9 +93,19 @@
     font-weight: 600;
 }
 
-/* Remove the dot indicator for cleaner look */
+/* Animated gold underline for active nav link */
 .nav-link.active::after {
-    display: none;
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 2px;
+    background: var(--color-primary);
+    border-radius: 2px;
+    animation: underline-expand 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
 }
 
 /* User Profile & Actions - Clean separator */

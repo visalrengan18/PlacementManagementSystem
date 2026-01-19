@@ -1,0 +1,191 @@
+/* ============================================
+   INSTAGRAM-STYLE AVATAR RING
+   Gradient ring shows profile completion
+   ============================================ */
+
+.avatar-ring {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.avatar-ring:hover {
+    transform: scale(1.05);
+}
+
+.avatar-ring:active {
+    transform: scale(0.98);
+}
+
+/* Ring Track - Gradient based on completion */
+.avatar-ring-track {
+    position: relative;
+    border-radius: 50%;
+    padding: 3px;
+
+    /* Conic gradient showing completion progress */
+    background: conic-gradient(var(--ring-color-start) 0deg,
+            var(--ring-color-end) var(--completion-angle),
+            rgba(255, 255, 255, 0.1) var(--completion-angle),
+            rgba(255, 255, 255, 0.1) 360deg);
+
+    /* Smooth rotation animation on load */
+    animation: ring-reveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes ring-reveal {
+    from {
+        opacity: 0;
+        transform: rotate(-90deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: rotate(0deg);
+    }
+}
+
+/* Inner avatar circle */
+.avatar-ring-inner {
+    border-radius: 50%;
+    background: var(--gradient-gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-initial {
+    color: #050505;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* ============================================
+   SIZE VARIANTS
+   ============================================ */
+.avatar-ring-sm .avatar-ring-track {
+    padding: 3px;
+}
+
+.avatar-ring-sm .avatar-ring-inner {
+    width: 26px;
+    height: 26px;
+}
+
+.avatar-ring-sm .avatar-initial {
+    font-size: 0.7rem;
+}
+
+.avatar-ring-md .avatar-ring-track {
+    padding: 4px;
+}
+
+.avatar-ring-md .avatar-ring-inner {
+    width: 34px;
+    height: 34px;
+}
+
+.avatar-ring-md .avatar-initial {
+    font-size: 0.85rem;
+}
+
+.avatar-ring-lg .avatar-ring-track {
+    padding: 5px;
+}
+
+.avatar-ring-lg .avatar-ring-inner {
+    width: 46px;
+    height: 46px;
+}
+
+.avatar-ring-lg .avatar-initial {
+    font-size: 1rem;
+}
+
+/* ============================================
+   RING COLOR STATES - Silver/Metallic Theme
+   ============================================ */
+
+/* Low completion (0-39%) - Dark gray */
+.ring-low {
+    --ring-color-start: rgba(100, 100, 100, 0.4);
+    --ring-color-end: rgba(150, 150, 150, 0.5);
+}
+
+/* Progress (40-69%) - Silver gradient */
+.ring-progress {
+    --ring-color-start: #9ca3af;
+    --ring-color-end: #d1d5db;
+}
+
+/* Good (70-99%) - Bright silver */
+.ring-good {
+    --ring-color-start: #d1d5db;
+    --ring-color-end: #f3f4f6;
+}
+
+/* Complete (100%) - Premium silver-white-black gradient */
+.ring-complete {
+    --ring-color-start: #ffffff;
+    --ring-color-end: #1f2937;
+}
+
+.ring-complete .avatar-ring-track {
+    background: conic-gradient(#ffffff 0deg,
+            #e5e7eb 60deg,
+            #9ca3af 120deg,
+            #4b5563 180deg,
+            #1f2937 240deg,
+            #6b7280 300deg,
+            #ffffff 360deg);
+    animation: ring-reveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards,
+        ring-shimmer 3s ease-in-out infinite;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+}
+
+@keyframes ring-shimmer {
+
+    0%,
+    100% {
+        filter: brightness(1);
+    }
+
+    50% {
+        filter: brightness(1.15);
+    }
+}
+
+/* Screen reader only */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    .avatar-ring-track {
+        animation: none;
+    }
+
+    .ring-complete .avatar-ring-track {
+        animation: none;
+    }
+}

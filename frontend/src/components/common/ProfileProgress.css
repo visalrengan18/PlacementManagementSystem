@@ -66,17 +66,22 @@
 }
 
 .progress-ring-fill {
-    transition: stroke-dashoffset 1s ease-out;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: progress-ring-draw 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .progress-ring-success {
     stroke: var(--color-success);
     filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.4));
+    animation: progress-ring-draw 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards,
+        success-glow-pulse 2s ease-in-out infinite 1.2s;
 }
 
 .progress-ring-good {
-    stroke: url(#goldGradient);
+    stroke: var(--color-primary);
     filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
+    animation: progress-ring-draw 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards,
+        ring-shimmer 2s ease-in-out infinite 1.2s;
 }
 
 .progress-ring-warning {
@@ -87,11 +92,6 @@
 .progress-ring-low {
     stroke: var(--color-error);
     filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.4));
-}
-
-/* Fallback for gold gradient - use solid color */
-.progress-ring-good {
-    stroke: var(--color-primary);
 }
 
 .progress-percentage {
@@ -171,10 +171,12 @@
     padding: var(--spacing-md);
     background: rgba(16, 185, 129, 0.1);
     border-radius: var(--radius-lg);
+    animation: fade-in-up 0.5s ease forwards, success-glow-pulse 2s ease-in-out infinite 0.5s;
 }
 
 .complete-icon {
     font-size: 1.5rem;
+    animation: success-spark 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
 }
 
 .profile-complete-message p {

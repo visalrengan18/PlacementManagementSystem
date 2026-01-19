@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import swipeApi from '../../api/swipeApi';
@@ -8,6 +8,47 @@ import ProfileProgress from '../../components/common/ProfileProgress';
 import { useConfetti } from '../../components/common/Confetti';
 import './Dashboard.css';
 
+// Custom hook for counting animation
+const useCountUp = (end, duration = 1000, shouldStart = true) => {
+    const [count, setCount] = useState(0);
+    const countRef = useRef(0);
+    const startTimeRef = useRef(null);
+
+    useEffect(() => {
+        if (!shouldStart || end === 0) {
+            setCount(end);
+            return;
+        }
+
+        countRef.current = 0;
+        startTimeRef.current = null;
+
+        const animate = (timestamp) => {
+            if (!startTimeRef.current) startTimeRef.current = timestamp;
+            const progress = Math.min((timestamp - startTimeRef.current) / duration, 1);
+
+            // Easing function for smooth deceleration
+            const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+            const currentCount = Math.floor(easeOutQuart * end);
+
+            if (currentCount !== countRef.current) {
+                countRef.current = currentCount;
+                setCount(currentCount);
+            }
+
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                setCount(end);
+            }
+        };
+
+        requestAnimationFrame(animate);
+    }, [end, duration, shouldStart]);
+
+    return count;
+};
+
 const SeekerDashboard = () => {
     const { user } = useAuth();
     const [stats, setStats] = useState({ applied: 0, matches: 0 });
@@ -16,6 +57,10 @@ const SeekerDashboard = () => {
     const [loading, setLoading] = useState(true);
     const [previousMatches, setPreviousMatches] = useState(0);
     const { triggerConfetti, ConfettiComponent } = useConfetti();
+
+    // Animated stat counts
+    const animatedApplied = useCountUp(stats.applied, 1200, !loading);
+    const animatedMatches = useCountUp(stats.matches, 1200, !loading);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -92,7 +137,7 @@ const SeekerDashboard = () => {
             <div className="dashboard">
                 <div className="dashboard-header animate-fade-in-up">
                     <div className="welcome-section">
-                        <h1 className="dashboard-title">Welcome, <span className="text-gradient">{user?.name || 'Job Seeker'}</span>! 👋</h1>
+                        <h1 className="dashboard-title">Welcome, <span className="text-gradient">{user?.name || 'Job Seeker'}</span>! <span className="wave-emoji">👋</span></h1>
                         <p className="dashboard-subtitle">Find your dream job today</p>
                     </div>
                 </div>
@@ -110,7 +155,7 @@ const SeekerDashboard = () => {
                             </svg>
                         </div>
                         <div className="stat-info">
-                            <span className="stat-value">{stats.applied}</span>
+                            <span className="stat-value">{animatedApplied}</span>
                             <span className="stat-label">Applied Jobs</span>
                         </div>
                     </div>
@@ -123,7 +168,7 @@ const SeekerDashboard = () => {
                             </svg>
                         </div>
                         <div className="stat-info">
-                            <span className="stat-value">{stats.matches}</span>
+                            <span className="stat-value">{animatedMatches}</span>
                             <span className="stat-label">Matches</span>
                         </div>
                     </div>
@@ -148,7 +193,7 @@ const SeekerDashboard = () => {
                     <div className="dashboard-section animate-fade-in-up">
                         <h2 className="section-heading">Quick Actions</h2>
                         <div className="actions-grid">
-                            <Link to="/seeker/jobs" className="action-card"><div className="action-icon">🔥</div><div className="action-content"><h3>Find Jobs</h3><p>Swipe through new opportunities</p></div><span className="action-arrow">→</span></Link>
+                            <Link to="/seeker/jobs" className="action-card action-card-primary"><div className="action-icon">🔥</div><div className="action-content"><h3>Find Jobs</h3><p>Swipe through new opportunities</p></div><span className="action-arrow">→</span></Link>
                             <Link to="/seeker/applications" className="action-card"><div className="action-icon">📋</div><div className="action-content"><h3>Applications</h3><p>Track your applications</p></div><span className="action-arrow">→</span></Link>
                             <Link to="/seeker/profile" className="action-card"><div className="action-icon">👤</div><div className="action-content"><h3>My Profile</h3><p>Update your information</p></div><span className="action-arrow">→</span></Link>
                             <Link to="/seeker/matches" className="action-card"><div className="action-icon">💕</div><div className="action-content"><h3>Matches</h3><p>View your matches</p></div><span className="action-arrow">→</span></Link>
@@ -176,6 +221,7 @@ const SeekerDashboard = () => {
                                         <p className="match-position">{m.job?.title || 'Position'}</p>
                                     </div>
                                     <span className="match-time">{formatTimeAgo(m.matchedAt)}</span>
+                                    <Link to={`/seeker/job/${m.job?.id}`} className="match-cta">View Job →</Link>
                                 </div>
                             ))}
                         </div>
