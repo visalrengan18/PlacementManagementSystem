@@ -108,6 +108,10 @@
 }
 
 .skills-input-group .form-input {
+    flex: 5;
+}
+
+.skills-input-group .btn {
     flex: 1;
 }
 

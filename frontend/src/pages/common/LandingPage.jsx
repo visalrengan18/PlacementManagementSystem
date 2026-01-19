@@ -99,7 +99,7 @@ const LandingPage = () => {
                 </div>
             </section>
 
-            <footer style={{ background: '#FFFFFF', padding: '80px 0', borderTop: '1px solid rgba(0,0,0,0.05)', marginTop: 'auto' }}>
+            <footer style={{ background: 'var(--color-bg-secondary)', padding: '60px 0', borderTop: '1px solid rgba(255,255,255,0.05)', marginTop: 'auto' }}>
                 <div className="landing-container" style={{ textAlign: 'center', color: 'var(--color-text-secondary)' }}>
                     <p>&copy; 2026 JobSwipe Inc. Clean. Clear. Connected.</p>
                 </div>

@@ -1,5 +1,6 @@
 package com.jobswipe.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -36,8 +38,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGenericException(Exception ex) {
+        log.error("Unexpected error occurred: ", ex);
         Map<String, String> response = new HashMap<>();
-        response.put("message", "An unexpected error occurred");
+        // Temporarily expose actual error message for debugging
+        response.put("message", "Error: " + ex.getClass().getSimpleName() + " - " + ex.getMessage());
         return ResponseEntity.internalServerError().body(response);
     }
 }

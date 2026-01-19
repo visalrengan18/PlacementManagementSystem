@@ -98,19 +98,23 @@
 }
 
 /* ============================================
-   LUXURY CARD STYLES
+   LUXURY CARD STYLES - Glassmorphism
    ============================================ */
 .card {
-    background: var(--color-bg-elevated);
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border-radius: var(--radius-card);
-    /* 24px super-ellipse */
-    border: 1px solid rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-luxury);
 }
 
 .card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-luxury-hover);
+    border-color: rgba(212, 175, 55, 0.2);
 }
 
 .card-elevated {
@@ -123,15 +127,25 @@
 
 .card-glow {
     box-shadow: var(--shadow-glow);
+    border-color: rgba(212, 175, 55, 0.3);
 }
 
 .card-gradient {
     background: var(--gradient-surface);
 }
 
+/* Glass Card Variant - Extra blur and transparency */
+.card-glass {
+    background: rgba(26, 26, 26, 0.6);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .card-header {
     padding: var(--spacing-lg);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.2);
 }
 
 .card-body {
@@ -140,7 +154,8 @@
 
 .card-footer {
     padding: var(--spacing-lg);
-    border-top: 1px solid rgba(0, 0, 0, 0.04);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.1);
 }
 
 /* ============================================
@@ -148,6 +163,9 @@
    ============================================ */
 .form-group {
     margin-bottom: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
 }
 
 .form-label {
@@ -161,18 +179,19 @@
 .form-input {
     width: 100%;
     padding: var(--spacing-md);
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(0, 0, 0, 0.06);
+    background: var(--color-bg-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-lg);
     color: var(--color-text-primary);
     font-size: var(--font-size-base);
     transition: all var(--transition-fast);
+    box-sizing: border-box;
 }
 
 .form-input:focus {
     outline: none;
-    border-color: var(--color-gold);
-    box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.12);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
 }
 
 .form-input::placeholder {
