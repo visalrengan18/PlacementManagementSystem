@@ -211,11 +211,11 @@ body {
     gap: 1.5rem;
 }
 
-.form-group {
+.auth-page .form-group {
     position: relative;
 }
 
-.form-input {
+.auth-page .form-input {
     width: 100%;
     padding: 16px 18px;
     background: rgba(255, 255, 255, 0.05);
@@ -227,22 +227,22 @@ body {
     transition: all 0.3s ease;
 }
 
-.form-input::placeholder {
+.auth-page .form-input::placeholder {
     color: transparent;
 }
 
-.form-input:focus {
+.auth-page .form-input:focus {
     border-color: var(--primary-color);
     background: rgba(255, 255, 255, 0.08);
     box-shadow: 0 0 0 3px var(--primary-light);
 }
 
-.form-input.error {
+.auth-page .form-input.error {
     border-color: var(--error-color);
 }
 
-/* Floating Label */
-.form-label {
+/* Floating Label - Auth page only */
+.auth-page .form-label {
     position: absolute;
     left: 18px;
     top: 50%;
@@ -255,8 +255,8 @@ body {
     padding: 0 6px;
 }
 
-.form-input:focus+.form-label,
-.form-input:not(:placeholder-shown)+.form-label {
+.auth-page .form-input:focus+.form-label,
+.auth-page .form-input:not(:placeholder-shown)+.form-label {
     top: 0;
     transform: translateY(-50%) scale(0.85);
     left: 14px;

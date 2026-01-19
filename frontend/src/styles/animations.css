@@ -1,8 +1,10 @@
 /* ============================================
-   LUXURY ANIMATIONS
+   LUXURY ANIMATIONS & MICRO-INTERACTIONS
    ============================================ */
 
-/* Keyframes */
+/* ============================================
+   KEYFRAMES
+   ============================================ */
 @keyframes float {
     0% {
         transform: translateY(0px);
@@ -33,15 +35,15 @@
 
 @keyframes pulse-soft {
     0% {
-        box-shadow: 0 0 0 0 rgba(197, 160, 89, 0.4);
+        box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4);
     }
 
     70% {
-        box-shadow: 0 0 0 10px rgba(197, 160, 89, 0);
+        box-shadow: 0 0 0 10px rgba(212, 175, 55, 0);
     }
 
     100% {
-        box-shadow: 0 0 0 0 rgba(197, 160, 89, 0);
+        box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
     }
 }
 
@@ -83,24 +85,6 @@
     }
 }
 
-@keyframes orb-float {
-    0% {
-        transform: translate(0, 0) rotate(0deg);
-    }
-
-    33% {
-        transform: translate(30px, -50px) rotate(120deg);
-    }
-
-    66% {
-        transform: translate(-20px, 20px) rotate(240deg);
-    }
-
-    100% {
-        transform: translate(0, 0) rotate(360deg);
-    }
-}
-
 @keyframes shimmer {
     0% {
         transform: translateX(-100%);
@@ -123,7 +107,312 @@
     }
 }
 
-/* Utilities */
+@keyframes icon-glow-pulse {
+
+    0%,
+    100% {
+        filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
+        transform: scale(1);
+    }
+
+    50% {
+        filter: drop-shadow(0 0 16px rgba(212, 175, 55, 0.7));
+        transform: scale(1.05);
+    }
+}
+
+@keyframes stat-card-enter {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Button Click Ripple Effect */
+@keyframes ripple {
+    0% {
+        transform: scale(0);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* Button Press Animation */
+@keyframes button-press {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(0.96);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Card Pop Animation */
+@keyframes card-pop {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.02);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Shake Animation (for errors) */
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-8px);
+    }
+
+    75% {
+        transform: translateX(8px);
+    }
+}
+
+/* Success Pop */
+@keyframes success-pop {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Slide In Animations */
+@keyframes slide-in-right {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slide-in-left {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slide-in-bottom {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Bounce In */
+@keyframes bounce-in {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    70% {
+        transform: scale(0.9);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ============================================
+   BUTTON MICRO-ANIMATIONS
+   ============================================ */
+
+/* Button with ripple effect */
+.btn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.3) 10%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(10, 10);
+    opacity: 0;
+    transition: transform 0.5s, opacity 0.5s;
+}
+
+.btn:active::after {
+    transform: scale(0, 0);
+    opacity: 0.3;
+    transition: 0s;
+}
+
+/* Button press effect */
+.btn:active {
+    transform: scale(0.97) !important;
+    transition: transform 0.1s ease;
+}
+
+/* Primary button glow on hover */
+.btn-primary {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-primary:hover {
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+}
+
+.btn-primary:active {
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+}
+
+/* Secondary button border glow */
+.btn-secondary:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+}
+
+/* ============================================
+   CARD MICRO-ANIMATIONS
+   ============================================ */
+
+/* Card entrance animation - apply to .card for entrance effect */
+.card {
+    animation: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Card hover with subtle lift and glow */
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow:
+        0 20px 40px -10px rgba(0, 0, 0, 0.4),
+        0 0 30px rgba(212, 175, 55, 0.1);
+}
+
+/* Card click feedback */
+.card:active {
+    transform: translateY(-2px) scale(0.99);
+    transition: transform 0.1s ease;
+}
+
+/* Interactive card - more pronounced effects */
+.card-interactive {
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-interactive:hover {
+    transform: translateY(-8px) scale(1.01);
+    border-color: rgba(212, 175, 55, 0.3);
+}
+
+.card-interactive:active {
+    transform: translateY(-4px) scale(0.99);
+}
+
+/* ============================================
+   PAGE & CONTAINER ANIMATIONS
+   ============================================ */
+
+/* Page container entrance */
+.page-container {
+    animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Staggered children animation */
+.animate-stagger>* {
+    animation: slide-in-bottom 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+}
+
+.animate-stagger>*:nth-child(1) {
+    animation-delay: 0ms;
+}
+
+.animate-stagger>*:nth-child(2) {
+    animation-delay: 50ms;
+}
+
+.animate-stagger>*:nth-child(3) {
+    animation-delay: 100ms;
+}
+
+.animate-stagger>*:nth-child(4) {
+    animation-delay: 150ms;
+}
+
+.animate-stagger>*:nth-child(5) {
+    animation-delay: 200ms;
+}
+
+.animate-stagger>*:nth-child(6) {
+    animation-delay: 250ms;
+}
+
+.animate-stagger>*:nth-child(7) {
+    animation-delay: 300ms;
+}
+
+.animate-stagger>*:nth-child(8) {
+    animation-delay: 350ms;
+}
+
+/* ============================================
+   UTILITY ANIMATION CLASSES
+   ============================================ */
+
 .animate-float {
     animation: float 6s ease-in-out infinite;
 }
@@ -145,25 +434,64 @@
     animation: scale-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Page Transitions */
-.page-transition-enter {
+.animate-bounce-in {
+    animation: bounce-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+.animate-slide-right {
+    animation: slide-in-right 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-left {
+    animation: slide-in-left 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-shake {
+    animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+.animate-success {
+    animation: success-pop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+/* Stat Card Entrance Animation with Stagger */
+.animate-stat-card {
+    animation: stat-card-enter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     opacity: 0;
-    transform: translateY(10px);
 }
 
-.page-transition-enter-active {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 300ms, transform 300ms;
+.animate-stagger-1 {
+    animation-delay: 0ms;
 }
 
-.page-transition-exit {
-    opacity: 1;
+.animate-stagger-2 {
+    animation-delay: 100ms;
 }
 
-.page-transition-exit-active {
-    opacity: 0;
-    transition: opacity 200ms;
+.animate-stagger-3 {
+    animation-delay: 200ms;
+}
+
+.animate-stagger-4 {
+    animation-delay: 300ms;
+}
+
+.animate-stagger-5 {
+    animation-delay: 400ms;
+}
+
+.animate-stagger-6 {
+    animation-delay: 500ms;
+}
+
+/* Icon Glow Animation */
+.animate-icon-glow {
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.animate-icon-glow:hover,
+.stat-card:hover .animate-icon-glow {
+    animation: icon-glow-pulse 1.5s ease-in-out infinite;
 }
 
 /* Luxury Hover Lift */
@@ -174,4 +502,100 @@
 .hover-lift:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-luxury-hover);
+}
+
+/* ============================================
+   LINK & NAV MICRO-ANIMATIONS
+   ============================================ */
+
+.nav-link {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-link:hover {
+    transform: translateY(-1px);
+}
+
+.nav-link:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* ============================================
+   INPUT FOCUS ANIMATIONS
+   ============================================ */
+
+.form-input {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-input:focus {
+    transform: scale(1.01);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+}
+
+/* ============================================
+   LIST ITEM ANIMATIONS
+   ============================================ */
+
+.list-item {
+    transition: all 0.2s ease;
+}
+
+.list-item:hover {
+    transform: translateX(4px);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* ============================================
+   NOTIFICATION ANIMATIONS
+   ============================================ */
+
+.notification-item {
+    transition: all 0.2s ease;
+}
+
+.notification-item:hover {
+    transform: translateX(4px);
+}
+
+/* Badge pulse for unread items */
+.notification-badge {
+    animation: pulse-soft 2s infinite;
+}
+
+/* ============================================
+   MODAL ANIMATIONS
+   ============================================ */
+
+.modal-overlay {
+    animation: fade-in 0.2s ease forwards;
+}
+
+.modal-content {
+    animation: scale-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ============================================
+   REDUCED MOTION SUPPORT
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }

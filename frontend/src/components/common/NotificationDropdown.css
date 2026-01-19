@@ -40,10 +40,11 @@
     right: 0;
     width: 340px;
     max-height: 420px;
-    background: var(--color-bg-card);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-secondary);
+    backdrop-filter: var(--glass-blur);
+    border: var(--glass-border);
     border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-luxury);
     overflow: hidden;
     z-index: var(--z-dropdown);
     margin-top: 0.5rem;

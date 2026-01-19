@@ -1,0 +1,51 @@
+no chats are saved
+search : everything shows same (if we click seeker it shows all including company)
+after clicking profiles in recent matches no user profile is displayed(also in matches,chat,search,network)
+in notification if we click on new follower,match notification it redirect to dashboard
+
+
+ UI/UX Enhancements
+Enhancement	Description
+Dark/Light Mode Toggle	Add a theme switcher so users can choose their preferred theme
+Micro-animations	Add subtle animations on button clicks, page transitions, and card interactions
+Skeleton Loaders	Replace spinners with skeleton loading placeholders for a more polished loading experience
+Confetti Animation	Celebrate when users get a match or receive a job offer
+Progress Indicators	Show profile completion percentage to encourage users to fill out their profiles
+
+⚡ Feature Ideas
+Feature	Description
+Resume Builder	Built-in tool to help seekers create/export professional resumes
+Video Introductions	Allow seekers to upload short video introductions
+Skill Assessments	Add coding challenges or quizzes to verify skills
+Interview Scheduling	Integrated calendar for scheduling interviews between companies and seekers
+AI Job Recommendations	Smart suggestions based on user profile and browsing history
+Salary Insights	Show salary ranges/estimates for job positions
+Company Reviews	Let seekers rate and review companies (like Glassdoor)
+Bookmarks/Saved Jobs	Allow users to save jobs they're interested in for later
+
+🔔 Engagement & Communication
+Enhancement	Description
+Email Notifications	Send email alerts for matches, messages, and application updates
+Push Notifications	Browser push notifications for real-time updates
+Read Receipts	Show when messages have been read in chat
+Typing Indicators	Show when the other person is typing in chat
+Bulk Messaging	Allow companies to message multiple matched candidates at once
+
+📊 Analytics & Insights
+Feature	Description
+Dashboard Analytics	Show charts/graphs for application trends, views over time
+Company Analytics	Help companies track posting performance and candidate engagement
+Application Funnel	Visualize application stages (Applied → Interview → Offer)
+
+🛡️ Trust & Safety
+Enhancement	Description
+Verified Badges	Show verified checkmarks for authenticated companies
+Report/Block Users	Allow users to report suspicious profiles or block others
+Profile Verification	LinkedIn integration or email verification badges
+
+📱 Technical Improvements
+Enhancement	Description
+PWA (Progressive Web App)	Make the website installable on mobile devices
+Offline Mode	Cache important data for offline viewing
+Export Data	Allow users to export their applications/matches as CSV/PDF
+Advanced Search Filters	Filter jobs by salary, location, remote/hybrid, experience level

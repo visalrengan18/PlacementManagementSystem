@@ -42,10 +42,7 @@ const ChatRoomWindow = () => {
             if (isInitial) {
                 setMessages(newMessages);
                 setLoading(false);
-                // Scroll to bottom on initial load
-                setTimeout(() => {
-                    messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
-                }, 100);
+                // Don't auto-scroll to bottom on initial load - let user read from where they are
             } else {
                 setMessages((prev) => [...newMessages, ...prev]);
                 setIsFetchingMore(false);

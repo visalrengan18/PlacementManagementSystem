@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { searchApi, followApi, connectionApi, directChatApi } from '../../api/networkApi';
+import { useNotification } from '../../context/NotificationContext';
 import './SearchPage.css';
 
 const SearchPage = () => {
     const navigate = useNavigate();
+    const { success, error: showError } = useNotification();
     const [query, setQuery] = useState('');
     const [filter, setFilter] = useState('all');
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [actionLoading, setActionLoading] = useState({});
 
     useEffect(() => {
         fetchResults();
@@ -18,9 +21,13 @@ const SearchPage = () => {
         setLoading(true);
         try {
             const response = await searchApi.search(query, filter);
-            setResults(response.data);
+            // The response is the axios data, so we need response.data or just response if intercepted
+            const data = response.data || response;
+            setResults(Array.isArray(data) ? data : []);
         } catch (err) {
             console.error('Search failed:', err);
+            showError('Failed to load search results');
+            setResults([]);
         } finally {
             setLoading(false);
         }
@@ -32,37 +39,53 @@ const SearchPage = () => {
     };
 
     const handleFollow = async (userId, isFollowing) => {
+        setActionLoading(prev => ({ ...prev, [`follow-${userId}`]: true }));
         try {
             if (isFollowing) {
                 await followApi.unfollow(userId);
+                success('Unfollowed successfully');
             } else {
                 await followApi.follow(userId);
+                success('Following!');
             }
             setResults(results.map(u =>
                 u.id === userId ? { ...u, isFollowing: !isFollowing } : u
             ));
         } catch (err) {
             console.error('Follow action failed:', err);
+            showError(err.message || 'Failed to update follow status');
+        } finally {
+            setActionLoading(prev => ({ ...prev, [`follow-${userId}`]: false }));
         }
     };
 
     const handleConnect = async (userId) => {
+        setActionLoading(prev => ({ ...prev, [`connect-${userId}`]: true }));
         try {
             await connectionApi.sendRequest(userId);
+            success('Connection request sent!');
             setResults(results.map(u =>
                 u.id === userId ? { ...u, connectionStatus: 'PENDING' } : u
             ));
         } catch (err) {
             console.error('Connection request failed:', err);
+            showError(err.message || 'Failed to send connection request');
+        } finally {
+            setActionLoading(prev => ({ ...prev, [`connect-${userId}`]: false }));
         }
     };
 
     const handleMessage = async (userId) => {
+        setActionLoading(prev => ({ ...prev, [`message-${userId}`]: true }));
         try {
             const response = await directChatApi.getOrCreateChat(userId);
-            navigate(`/chat/room/${response.data.id}`);
+            const chatRoom = response.data || response;
+            navigate(`/chat/room/${chatRoom.id}`);
         } catch (err) {
             console.error('Failed to start chat:', err);
+            showError(err.message || 'Failed to start chat');
+        } finally {
+            setActionLoading(prev => ({ ...prev, [`message-${userId}`]: false }));
         }
     };
 
@@ -132,25 +155,27 @@ const SearchPage = () => {
                                 <button
                                     className={`btn-follow ${user.isFollowing ? 'following' : ''}`}
                                     onClick={() => handleFollow(user.id, user.isFollowing)}
+                                    disabled={actionLoading[`follow-${user.id}`]}
                                 >
-                                    {user.isFollowing ? 'Following' : 'Follow'}
+                                    {actionLoading[`follow-${user.id}`] ? '...' : user.isFollowing ? 'Following' : 'Follow'}
                                 </button>
 
                                 {user.role === 'SEEKER' && (
                                     <button
                                         className={`btn-connect ${user.isConnected ? 'connected' : ''} ${user.connectionStatus === 'PENDING' ? 'pending' : ''}`}
-                                        onClick={() => !user.isConnected && user.connectionStatus !== 'PENDING' && handleConnect(user.id)}
-                                        disabled={user.isConnected || user.connectionStatus === 'PENDING'}
+                                        onClick={() => handleConnect(user.id)}
+                                        disabled={user.isConnected || user.connectionStatus === 'PENDING' || actionLoading[`connect-${user.id}`]}
                                     >
-                                        {user.isConnected ? 'Connected' : user.connectionStatus === 'PENDING' ? 'Pending' : 'Connect'}
+                                        {actionLoading[`connect-${user.id}`] ? '...' : user.isConnected ? 'Connected' : user.connectionStatus === 'PENDING' ? 'Pending' : 'Connect'}
                                     </button>
                                 )}
 
                                 <button
                                     className="btn-message"
                                     onClick={() => handleMessage(user.id)}
+                                    disabled={actionLoading[`message-${user.id}`]}
                                 >
-                                    💬
+                                    {actionLoading[`message-${user.id}`] ? '...' : '💬'}
                                 </button>
                             </div>
                         </div>

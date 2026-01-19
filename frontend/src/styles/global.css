@@ -19,8 +19,10 @@ html {
 
 body {
     font-family: var(--font-sans);
-    /* Midnight Gold - Deep Obsidian Background */
-    background: var(--color-bg-primary);
+    /* Midnight Gold - Animated Liquid Metal Background */
+    background: var(--gradient-liquid-metal);
+    background-size: 400% 400%;
+    animation: liquidMetal 20s ease infinite;
     background-attachment: fixed;
     color: var(--color-text-primary);
     font-size: var(--font-size-base);
@@ -30,6 +32,37 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+    position: relative;
+}
+
+/* Cinematic Bokeh/Glow overlay for all pages */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(circle at 15% 85%, rgba(212, 175, 55, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 15%, rgba(212, 175, 55, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(0, 119, 182, 0.03) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes liquidMetal {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 /* Curve / Wave Transitions */
@@ -64,6 +97,8 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    position: relative;
+    z-index: 1;
 }
 
 a {

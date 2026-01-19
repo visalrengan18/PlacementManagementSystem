@@ -1,0 +1,195 @@
+/* ============================================
+   PROFILE PROGRESS COMPONENT - Midnight Gold
+   ============================================ */
+
+.profile-progress-card {
+    padding: var(--spacing-lg);
+    text-align: center;
+}
+
+.profile-progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.profile-progress-header h3 {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+}
+
+.progress-status {
+    font-size: var(--font-size-sm);
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    font-weight: 500;
+}
+
+.progress-status-success {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--color-success);
+}
+
+.progress-status-good {
+    background: rgba(212, 175, 55, 0.15);
+    color: var(--color-primary);
+}
+
+.progress-status-warning {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--color-warning);
+}
+
+.progress-status-low {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--color-error);
+}
+
+/* Progress Ring */
+.profile-progress-ring-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto var(--spacing-lg);
+}
+
+.progress-ring {
+    width: 100%;
+    height: 100%;
+    transform: rotate(0deg);
+}
+
+.progress-ring-bg {
+    stroke: rgba(255, 255, 255, 0.1);
+}
+
+.progress-ring-fill {
+    transition: stroke-dashoffset 1s ease-out;
+}
+
+.progress-ring-success {
+    stroke: var(--color-success);
+    filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.4));
+}
+
+.progress-ring-good {
+    stroke: url(#goldGradient);
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
+}
+
+.progress-ring-warning {
+    stroke: var(--color-warning);
+    filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.4));
+}
+
+.progress-ring-low {
+    stroke: var(--color-error);
+    filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.4));
+}
+
+/* Fallback for gold gradient - use solid color */
+.progress-ring-good {
+    stroke: var(--color-primary);
+}
+
+.progress-percentage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: baseline;
+}
+
+.progress-number {
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: var(--font-serif);
+    color: var(--color-text-primary);
+}
+
+.progress-symbol {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    margin-left: 2px;
+}
+
+/* Missing Fields */
+.profile-progress-details {
+    text-align: left;
+    padding-top: var(--spacing-md);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.missing-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-sm);
+}
+
+.missing-fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-md);
+}
+
+.missing-field-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+}
+
+.missing-field-more {
+    padding: 4px 10px;
+    background: rgba(212, 175, 55, 0.1);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    color: var(--color-primary);
+    font-weight: 500;
+}
+
+.complete-profile-btn {
+    width: 100%;
+    margin-top: var(--spacing-sm);
+}
+
+/* Complete Message */
+.profile-complete-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background: rgba(16, 185, 129, 0.1);
+    border-radius: var(--radius-lg);
+}
+
+.complete-icon {
+    font-size: 1.5rem;
+}
+
+.profile-complete-message p {
+    margin: 0;
+    color: var(--color-success);
+    font-weight: 500;
+}
+
+/* Animation */
+@keyframes progress-fill {
+    from {
+        stroke-dashoffset: 326.7;
+    }
+}
+
+.progress-ring-fill {
+    animation: progress-fill 1s ease-out forwards;
+}
